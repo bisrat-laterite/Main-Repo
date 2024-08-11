@@ -5,7 +5,7 @@ app = Flask(__name__)
 
 # Replace with your bot's token from BotFather
 TELEGRAM_BOT_TOKEN = 'YOUR_BOT_TOKEN_HERE'
-TELEGRAM_API_URL = 'https://api.telegram.org/bot6081280787:AAF3HKZAORELluBhj0A90cv62QAWd8ex_Hw'
+TELEGRAM_API_URL = 'https://api.telegram.org/bot6081280787:AAF3HKZAORELluBhj0A90cv62QAWd8ex_Hw/'
 
 def send_message(chat_id, text):
     """Send a message to a user."""

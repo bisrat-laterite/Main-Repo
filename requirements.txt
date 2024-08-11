@@ -1,2 +1,3 @@
 requests
-flaskgunicorn
+flask
+gunicorn

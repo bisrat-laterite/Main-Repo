@@ -1,11 +1,30 @@
 from flask import Flask, request, jsonify
 import requests
+import gspread
+import pandas as pd
+import os
+import base64
 
 app = Flask(__name__)
 
 # Replace with your bot's token from BotFather
 TELEGRAM_BOT_TOKEN = 'YOUR_BOT_TOKEN_HERE'
 TELEGRAM_API_URL = 'https://api.telegram.org/bot6081280787:AAF3HKZAORELluBhj0A90cv62QAWd8ex_Hw/'
+
+google_credentials = os.getenv("GOOGLE_CREDENTIALS_BASE64")
+
+def read_gsheet():
+    if google_credentials:
+        credentials_json = base64.b64decode(google_credentials)
+        with open("creds.json", "wb") as f:
+            f.write(credentials_json)
+    gc=gspread.service_account(filename='creds.json')
+    key_='1kq0JxL3PxB4yxZfBv_2_WOEHvy6kptP7jqB31v0XZoU' ### change to the sheets for regron
+    ### Reading in the specific googles sheets file
+    sh=gc.open_by_key(key_)
+    gs=sh.worksheet('Master')
+    update_id = gs.cell(1, 2).value
+    return update_id
 
 def send_message(chat_id, text):
     """Send a message to a user."""
@@ -25,6 +44,8 @@ def webhook():
         # Handle the message and respond
         if text == '/start':
             send_message(chat_id, "Welcome! How can I help you today?")
+            ID=read_gsheet()
+            send_message(chat_id, str(ID))
         elif text == '/help':
             send_message(chat_id, "Here are the commands you can use...")
         else:

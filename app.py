@@ -73,12 +73,15 @@ def webhook():
             key='1kq0JxL3PxB4yxZfBv_2_WOEHvy6kptP7jqB31v0XZoU'
             sheet_name="project_database"
             gs_=read_gsheet(key, sheet_name)
-            _all=gs_.get_all_records()
-            # working on the gsheets returned
-            dataframe = pd.DataFrame(_all)
-            filter1= dataframe['project_id']==arg
-            val=list(dataframe[filter1]['project_key'])[0]
-            send_message(chat_id,str(val))
+            update_id = gs_.cell(1, 2).value
+            send_message(chat_id, update_id)
+
+            # _all=gs_.get_all_records()
+            # # working on the gsheets returned
+            # dataframe = pd.DataFrame(_all)
+            # filter1= dataframe['project_id']==arg
+            # val=list(dataframe[filter1]['project_key'])[0]
+            # send_message(chat_id,str(val))
             #project_id
     # if 'message' in update:
     #     chat_id = update['message']['chat']['id']

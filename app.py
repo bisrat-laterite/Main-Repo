@@ -111,7 +111,7 @@ def webhook():
                     + "\n" + " "
                     # text = f"<span class='tg-spoiler'>Enumerator Name:</span>"+ row['Enumerator Name'] +  "\n" +   f"<strong>Variable Name:</strong>" + row['variable']  
 
-                    print(text)
+                    # print(text)
                     # gs=sh.worksheet('Data Quality')
                     if send_message_main(chat_id,text)==200:
                         send_message_main(chat_id,"succes")

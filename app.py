@@ -52,6 +52,7 @@ def send_message(chat_id, text):
     url = TELEGRAM_API_URL + 'sendMessage'
     payload = {'chat_id': chat_id, 'text': text}
     requests.post(url, json=payload)
+
 ##function to send the message of the data quality questions 
 def send_message_main(chat_id,text):
   base_url=TELEGRAM_API_URL + 'sendMessage'
@@ -80,6 +81,7 @@ def webhook():
         # command, *args = text.split(" ")
         if command == '/start':
             send_message(chat_id, "Welcome! Use /help to see available commands.")
+
         elif command == '/dq' and len(args)>=1:
             send_message(chat_id, "/start - Welcome message\n/help - List commands\n/echo [text] - Echo back text")
             key='1kq0JxL3PxB4yxZfBv_2_WOEHvy6kptP7jqB31v0XZoU'
@@ -99,6 +101,7 @@ def webhook():
             _all2=hs_.get_all_records()
             # working on the gsheets returned
             dataframe2 = pd.DataFrame(_all2)
+            dataframe2[dataframe2['Chat_id']==str(chat_id)]
             for s, data in dataframe2.groupby('Chat_id'):
                 # print(chat_id)
                 for index, row in data.iterrows():
@@ -115,25 +118,6 @@ def webhook():
                     # gs=sh.worksheet('Data Quality')
                     if send_message_main(chat_id,text)==200:
                         send_message_main(chat_id,"succes")
-
-
-
-            #project_id
-    # if 'message' in update:
-    #     chat_id = update['message']['chat']['id']
-    #     text = update['message'].get('text', '')
-    
-
-    #     # Handle the message and respond
-    #     if text == '/start':
-    #         send_message(chat_id, "Welcome! How can I help you today?")
-    #         send_message(chat_id, str(ID))
-    #         #append_to_sheet
-    #     elif text == '/help':
-    #         send_message(chat_id, "Here are the commands you can use...")
-    #     else:
-    #         send_message(chat_id, f"You said: {text}")
-
     return 'OK', 200
 
 if __name__ == '__main__':

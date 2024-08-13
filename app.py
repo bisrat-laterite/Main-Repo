@@ -63,7 +63,7 @@ def webhook():
         text = update['message'].get('text', '')
 
     if text.startswith('/'):
-        command, *args = text.split()
+        command, *args = text.split(" ")
         if command == '/start':
             send_message(chat_id, "Welcome! Use /help to see available commands.")
         elif command == '/dq':

@@ -68,7 +68,7 @@ def webhook():
         # command, *args = text.split(" ")
         if command == '/start':
             send_message(chat_id, "Welcome! Use /help to see available commands.")
-        elif command == '/dq':
+        elif command == '/dq' and len(args)>=1:
             send_message(chat_id, "/start - Welcome message\n/help - List commands\n/echo [text] - Echo back text")
             key='1kq0JxL3PxB4yxZfBv_2_WOEHvy6kptP7jqB31v0XZoU'
             sheet_name="project_database"
@@ -76,12 +76,12 @@ def webhook():
             update_id = gs_.cell(1, 2).value
             send_message(chat_id, update_id)
 
-            # _all=gs_.get_all_records()
-            # # working on the gsheets returned
-            # dataframe = pd.DataFrame(_all)
-            # filter1= dataframe['project_id']==arg
-            # val=list(dataframe[filter1]['project_key'])[0]
-            # send_message(chat_id,str(val))
+            _all=gs_.get_all_records()
+            # working on the gsheets returned
+            dataframe = pd.DataFrame(_all)
+            filter1= dataframe['project_id']==args[0]
+            val=list(dataframe[filter1]['project_key'])[0]
+            send_message(chat_id,str(val))
             #project_id
     # if 'message' in update:
     #     chat_id = update['message']['chat']['id']

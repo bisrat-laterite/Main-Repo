@@ -63,7 +63,9 @@ def webhook():
         text = update['message'].get('text', '')
 
     if text.startswith('/'):
-        command, *args = text.split(" ")
+        command=text.split(" ")[0]
+        arg=text.split(" ")[1]
+        # command, *args = text.split(" ")
         if command == '/start':
             send_message(chat_id, "Welcome! Use /help to see available commands.")
         elif command == '/dq':
@@ -74,7 +76,7 @@ def webhook():
             _all=gs_.get_all_records()
             # working on the gsheets returned
             dataframe = pd.DataFrame(_all)
-            filter1= dataframe['project_id']==args[0]
+            filter1= dataframe['project_id']==arg
             val=list(dataframe[filter1]['project_key'])[0]
             send_message(chat_id,str(val))
             #project_id

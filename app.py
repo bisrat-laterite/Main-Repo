@@ -52,6 +52,18 @@ def send_message(chat_id, text):
     url = TELEGRAM_API_URL + 'sendMessage'
     payload = {'chat_id': chat_id, 'text': text}
     requests.post(url, json=payload)
+##function to send the message of the data quality questions 
+def send_message_main(chat_id,text):
+  base_url=TELEGRAM_API_URL + 'sendMessage'
+  parameters={
+        'chat_id':chat_id,
+        'text':text,
+        'parse_mode':'HTML',
+        'disable_web_page_preview':True
+
+  }
+  success=requests.get(base_url, data=parameters)
+  return success.status_code
 
 @app.route('/webhook', methods=['POST'])
 def webhook():
@@ -82,6 +94,30 @@ def webhook():
             filter1= dataframe['project_id']==args[0]
             val=list(dataframe[filter1]['project_key'])[0]
             send_message(chat_id,str(val))
+            time.sleep(2)
+            hs_=read_gsheet(val, "Data Quality")
+            _all2=gs_.get_all_records()
+            # working on the gsheets returned
+            dataframe2 = pd.DataFrame(_all2)
+            for s, data in dataframe2.groupby('Chat_id'):
+                # print(chat_id)
+                for index, row in data.iterrows():
+                    text=(str(dict(row)))
+                    text =  "<a href='https://www.laterite.com/'>Data Quality Bot</a>"  \
+                    + "\n" + f"<b>Enumerator Name: </b>"+ row['DC ID'] + \
+                        "\n" +   f"<b>HHID: </b>" + str(row['HHID'])  + \
+                        "\n" +   f"<b>Variable: </b>" + row['Variable'] \
+                        +  "\n" +   f"<b>Data Quality Question :</b>" + row['Comment'] \
+                    + "\n" + " "
+                    # text = f"<span class='tg-spoiler'>Enumerator Name:</span>"+ row['Enumerator Name'] +  "\n" +   f"<strong>Variable Name:</strong>" + row['variable']  
+
+                    print(text)
+                    # gs=sh.worksheet('Data Quality')
+                    if send_message_main(chat_id,text)==200:
+                        send_message_main(chat_id,"succes")
+
+
+
             #project_id
     # if 'message' in update:
     #     chat_id = update['message']['chat']['id']

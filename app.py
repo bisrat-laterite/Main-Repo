@@ -96,7 +96,7 @@ def webhook():
             send_message(chat_id,str(val))
             time.sleep(2)
             hs_=read_gsheet(val, "Data Quality")
-            _all2=gs_.get_all_records()
+            _all2=hs_.get_all_records()
             # working on the gsheets returned
             dataframe2 = pd.DataFrame(_all2)
             for s, data in dataframe2.groupby('Chat_id'):

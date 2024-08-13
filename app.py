@@ -82,42 +82,42 @@ def webhook():
         if command == '/start':
             send_message(chat_id, "Welcome! Use /help to see available commands.")
 
-        elif command == '/dq' and len(args)>=1:
-            send_message(chat_id, "/start - Welcome message\n/help - List commands\n/echo [text] - Echo back text")
-            key='1kq0JxL3PxB4yxZfBv_2_WOEHvy6kptP7jqB31v0XZoU'
-            sheet_name="project_database"
-            gs_=read_gsheet(key, sheet_name)
-            update_id = gs_.cell(1, 2).value
-            send_message(chat_id, update_id)
+        # elif command == '/dq' and len(args)>=1:
+        #     send_message(chat_id, "/start - Welcome message\n/help - List commands\n/echo [text] - Echo back text")
+        #     key='1kq0JxL3PxB4yxZfBv_2_WOEHvy6kptP7jqB31v0XZoU'
+        #     sheet_name="project_database"
+        #     gs_=read_gsheet(key, sheet_name)
+        #     update_id = gs_.cell(1, 2).value
+        #     send_message(chat_id, update_id)
 
-            _all=gs_.get_all_records()
-            # working on the gsheets returned
-            dataframe = pd.DataFrame(_all)
-            filter1= dataframe['project_id']==args[0]
-            val=list(dataframe[filter1]['project_key'])[0]
-            send_message(chat_id,str(val))
-            time.sleep(2)
-            hs_=read_gsheet(val, "Data Quality")
-            _all2=hs_.get_all_records()
-            # working on the gsheets returned
-            dataframe2 = pd.DataFrame(_all2)
-            dataframe2[dataframe2['Chat_id']==str(chat_id)]
-            for s, data in dataframe2.groupby('Chat_id'):
-                # print(chat_id)
-                for index, row in data.iterrows():
-                    text=(str(dict(row)))
-                    text =  "<a href='https://www.laterite.com/'>Data Quality Bot</a>"  \
-                    + "\n" + f"<b>Enumerator Name: </b>"+ row['DC ID'] + \
-                        "\n" +   f"<b>HHID: </b>" + str(row['HHID'])  + \
-                        "\n" +   f"<b>Variable: </b>" + row['Variable'] \
-                        +  "\n" +   f"<b>Data Quality Question :</b>" + row['Comment'] \
-                    + "\n" + " "
-                    # text = f"<span class='tg-spoiler'>Enumerator Name:</span>"+ row['Enumerator Name'] +  "\n" +   f"<strong>Variable Name:</strong>" + row['variable']  
+        #     _all=gs_.get_all_records()
+        #     # working on the gsheets returned
+        #     dataframe = pd.DataFrame(_all)
+        #     filter1= dataframe['project_id']==args[0]
+        #     val=list(dataframe[filter1]['project_key'])[0]
+        #     send_message(chat_id,str(val))
+        #     time.sleep(2)
+        #     hs_=read_gsheet(val, "Data Quality")
+        #     _all2=hs_.get_all_records()
+        #     # working on the gsheets returned
+        #     dataframe2 = pd.DataFrame(_all2)
+        #     dataframe2[dataframe2['Chat_id']==str(chat_id)]
+        #     for s, data in dataframe2.groupby('Chat_id'):
+        #         # print(chat_id)
+        #         for index, row in data.iterrows():
+        #             text=(str(dict(row)))
+        #             text =  "<a href='https://www.laterite.com/'>Data Quality Bot</a>"  \
+        #             + "\n" + f"<b>Enumerator Name: </b>"+ row['DC ID'] + \
+        #                 "\n" +   f"<b>HHID: </b>" + str(row['HHID'])  + \
+        #                 "\n" +   f"<b>Variable: </b>" + row['Variable'] \
+        #                 +  "\n" +   f"<b>Data Quality Question :</b>" + row['Comment'] \
+        #             + "\n" + " "
+        #             # text = f"<span class='tg-spoiler'>Enumerator Name:</span>"+ row['Enumerator Name'] +  "\n" +   f"<strong>Variable Name:</strong>" + row['variable']  
 
-                    # print(text)
-                    # gs=sh.worksheet('Data Quality')
-                    if send_message_main(chat_id,text)==200:
-                        send_message_main(chat_id,"succes")
+        #             # print(text)
+        #             # gs=sh.worksheet('Data Quality')
+        #             if send_message_main(chat_id,text)==200:
+        #                 send_message_main(chat_id,"succes")
     return 'OK', 200
 
 if __name__ == '__main__':

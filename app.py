@@ -70,7 +70,7 @@ def webhook():
             send_message(chat_id, "Welcome! Use /help to see available commands.")
         elif command == '/dq':
             send_message(chat_id, "/start - Welcome message\n/help - List commands\n/echo [text] - Echo back text")
-            key='1THWuE4gC9Gwnnqx_GgTj4fv9kXJS2htrPWuv1Yff134'
+            key='1kq0JxL3PxB4yxZfBv_2_WOEHvy6kptP7jqB31v0XZoU'
             sheet_name="project_database"
             gs_=read_gsheet(key, sheet_name)
             _all=gs_.get_all_records()

@@ -91,8 +91,11 @@ def webhook():
                 main_content=pd.DataFrame(main.get_all_records())
                 key=list(main_content[main_content['project_id']==args]['key'])[0]
                 # project_key=project_link.replace('//', '/').split('/')[4]
-                read_st=pd.DataFrame(read_gsheet(key, "Data_Quality").get_all_records()).iloc[2,1]
-                send_message(chat_id, str(read_st))
+                try:
+                    read_st=pd.DataFrame(read_gsheet(key, "Data_Quality").get_all_records()).iloc[2,1]
+                    send_message(chat_id, str(read_st))
+                except:
+                    send_message(chat_id, "Some errors_ let the project manager know")
     return 'OK', 200
 
 if __name__ == '__main__':

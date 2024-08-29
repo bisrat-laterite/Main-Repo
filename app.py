@@ -93,11 +93,13 @@ def webhook():
                 # project_key=project_link.replace('//', '/').split('/')[4]
                 send_message(chat_id, key)
                 try:
-                    send_message(chat_id, key)
-                    read_st=pd.DataFrame(read_gsheet(key, "Data_Quality").get_all_records()).iloc[1,1]
-                    send_message(chat_id, str(read_st))
+                    a=read_gsheet(key, "Data_Quality")
+                    send_message(chat_id, "success")
                 except:
                     send_message(chat_id, "Some errors_ let the project manager know")
+
+
+                    
     return 'OK', 200
 
 if __name__ == '__main__':

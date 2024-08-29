@@ -13,6 +13,8 @@ app = Flask(__name__)
 # Replace with your bot's token from BotFather
 TELEGRAM_BOT_TOKEN = 'YOUR_BOT_TOKEN_HERE'
 TELEGRAM_API_URL = 'https://api.telegram.org/bot6081280787:AAF3HKZAORELluBhj0A90cv62QAWd8ex_Hw/'
+main_sheet_key='1kq0JxL3PxB4yxZfBv_2_WOEHvy6kptP7jqB31v0XZoU'
+main_sheet_name='project_database'
 
 google_credentials = os.getenv("GOOGLE_CREDENTIALS_BASE64")
 
@@ -85,7 +87,10 @@ def webhook():
         elif command == '/dq':
             if len(text.split(" "))==2:
                 args=text.split(" ")[1]
-                send_message(chat_id, "project code"+args)
+                main=read_gsheet(main_sheet_key, main_sheet_name)
+                main_content=pd.DataFrame(main.get_all_records())
+                text_send=list(main_content[main_content['project_id']==args]['project'])[0]
+                send_message(chat_id, text_send)
     return 'OK', 200
 
 if __name__ == '__main__':

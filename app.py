@@ -94,6 +94,8 @@ def webhook():
                 send_message(chat_id, key)
                 try:
                     a=read_gsheet(key, "Data_Quality")
+                    content=pd.DataFrame(a.get_all_records()).columns[0]
+                    send_message(chat_id, content)
                     send_message(chat_id, "success")
                 except:
                     send_message(chat_id, "Some errors_ let the project manager know")

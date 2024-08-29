@@ -91,6 +91,7 @@ def webhook():
                 main_content=pd.DataFrame(main.get_all_records())
                 key=list(main_content[main_content['project_id']==args]['key'])[0]
                 # project_key=project_link.replace('//', '/').split('/')[4]
+                send_message(chat_id, key)
                 try:
                     send_message(chat_id, key)
                     read_st=pd.DataFrame(read_gsheet(key, "Data_Quality").get_all_records()).iloc[1,1]

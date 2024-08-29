@@ -89,8 +89,9 @@ def webhook():
                 args=text.split(" ")[1]
                 main=read_gsheet(main_sheet_key, main_sheet_name)
                 main_content=pd.DataFrame(main.get_all_records())
-                text_send=list(main_content[main_content['project_id']==args]['project'])[0]
-                send_message(chat_id, text_send)
+                project_link=list(main_content[main_content['project_id']==args]['project_key'])[0]
+                project_key=project_link.replac('//', '/').split('/')[4]
+                send_message(chat_id, project_key)
     return 'OK', 200
 
 if __name__ == '__main__':

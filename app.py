@@ -93,16 +93,16 @@ def webhook():
                 # project_key=project_link.replace('//', '/').split('/')[4]
                 send_message(chat_id, key)
                 try:
-                    a=read_gsheet(key, "Data_Quality")
+                    a=read_gsheet(key, "Data Quality - General")
                     content=pd.DataFrame(a.get_all_records())
-                    filtered=content[content['chat_id']==chat_id].head(5)
+                    filtered=content[content['chat_id']==chat_id]
                     for index, row in filtered.iterrows():
                         text=(str(dict(row)))
                         text =  "<a href='https://www.laterite.com/'>Data Quality Bot</a>" \
-                        + "\n" + f"<b>Enumerator Name: </b>"+ row['DC ID'] + \
+                        + "\n" + f"<b>Enumerator Name: </b>"+ row['Enumerator'] + \
                             "\n" +   f"<b>HHID: </b>" + str(row['HHID'])  + \
                             "\n" +   f"<b>Variable: </b>" + row['Variable'] \
-                            +  "\n" +   f"<b>Data Quality Question :</b>" + row['Comment'] \
+                            +  "\n" +   f"<b>Data Quality Question :</b>" + row['issue_description'] \
                         + "\n" +  f"<b>Project ID: </b> "+ args
                         send_message_main(chat_id, text)
                     send_message(chat_id, "success")

@@ -104,7 +104,7 @@ def webhook():
                             "\n" +   f"<b>Variable: </b>" + row['Variable'] \
                             +  "\n" +   f"<b>Data Quality Question :</b>" + row['Comment'] \
                         + "\n" +  f"<b>Project ID: </b> "+ args
-                        send_message(chat_id, text)
+                        send_message_main(chat_id, text)
                     send_message(chat_id, "success")
                 except:
                     send_message(chat_id, "Some errors_ let the project manager know")

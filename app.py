@@ -95,7 +95,7 @@ def webhook():
                 try:
                     a=read_gsheet(key, "Data_Quality")
                     content=pd.DataFrame(a.get_all_records())
-                    filtered=content[content['chat_id']==chat_id]
+                    filtered=content[content['chat_id']==chat_id].head(5)
                     for index, row in filtered.iterrows():
                         text=(str(dict(row)))
                         text =  "<a href='https://www.laterite.com/'>Data Quality Bot</a>" \

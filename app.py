@@ -102,6 +102,8 @@ def webhook():
                         a=read_gsheet(key, "Data Quality - General")
                         content=pd.DataFrame(a.get_all_records())
                         filtered=content[content['chat_id']==chat_id]
+                        ### send only pending/ clarification needed comments
+                        filtered=filtered[filtered['Status'].isin(["Pending", "Clarification Needed"])]
                         for index, row in filtered.iterrows():
                             text=(str(dict(row)))
                             text =  "<a href='https://www.laterite.com/'>Data Quality Bot</a>" \

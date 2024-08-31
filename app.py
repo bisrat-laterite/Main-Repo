@@ -105,13 +105,12 @@ def send_message_main(chat_id,text):
 def webhook():
     """Handle incoming updates from Telegram."""
     update = request.json
+        ### handling requests
+    if 'message' in update:
+        chat_id = update['message']['chat']['id']
+        text = update['message'].get('text', '')
 
     if 'reply_to_message' not in update['message']:
-        ### handling requests
-        if 'message' in update:
-            chat_id = update['message']['chat']['id']
-            text = update['message'].get('text', '')
-
         if text.startswith('/'):
             # command, *args = text.split()
             command=text.split(" ")[0]

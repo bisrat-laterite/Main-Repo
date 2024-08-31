@@ -90,16 +90,14 @@ def webhook():
                 main=read_gsheet(main_sheet_key, main_sheet_name)
                 main_content=pd.DataFrame(main.get_all_records())
                 ### project key
-                key=list(main_content[main_content['project_id']==args]['key'])[0]
-                ### project manager
-                manager=list(main_content[main_content['project_id']==args]['manager'])[0]
-                ### if key not found send an error message
-                if key=="":
-                    send_message(chat_id, f"the project id you specified({args}) is wrong. Please try again with the right project id.")
-
-                # project_key=project_link.replace('//', '/').split('/')[4]
-                # send_message(chat_id, key)
-                if key !="":
+                ### Checking 
+                if args in list(main_content['project_id']):
+                    key=list(main_content[main_content['project_id']==args]['key'])[0]
+                    ### project manager
+                    manager=list(main_content[main_content['project_id']==args]['manager'])[0]
+                    ### if key not found send an error message
+                    # project_key=project_link.replace('//', '/').split('/')[4]
+                    # send_message(chat_id, key)
                     try:
                         a=read_gsheet(key, "Data Quality - General")
                         content=pd.DataFrame(a.get_all_records())
@@ -116,6 +114,8 @@ def webhook():
                         # send_message(chat_id, "success")
                     except:
                         send_message(chat_id, f"Some error let the project manager ({manager}/Bisrat) know")
+                else:
+                     send_message(chat_id, f"the project id you specified({args}) is wrong. Please try again with the right project id.")
 
 
                     

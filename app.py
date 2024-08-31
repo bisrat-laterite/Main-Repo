@@ -155,6 +155,7 @@ def webhook():
                         send_message(chat_id, f"the project id you specified({args}) is wrong. Please try again with the right project id.")
     if 'reply_to_message' in update:   
     # handling responses
+        print(update)
         pre_message_inf=update['reply_to_message']
         message=update['message'] if 'message' in update else update['edited_message'] if "edited_message" in update else ""
         #### getting a dict of the text send

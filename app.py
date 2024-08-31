@@ -106,7 +106,7 @@ def webhook():
     """Handle incoming updates from Telegram."""
     update = request.json
 
-    if 'reply_to_message' not in update:
+    if 'reply_to_message' not in update['message']:
         ### handling requests
         if 'message' in update:
             chat_id = update['message']['chat']['id']
@@ -153,10 +153,10 @@ def webhook():
                             send_message(chat_id, f"Some error let the project manager ({manager}/Bisrat) know")
                     else:
                         send_message(chat_id, f"the project id you specified({args}) is wrong. Please try again with the right project id.")
-    if 'reply_to_message' in update:   
+    if 'reply_to_message' in update['message']:   
     # handling responses
         print(update)
-        pre_message_inf=update['reply_to_message']
+        pre_message_inf=update['message']['reply_to_message']
         message=update['message'] if 'message' in update else update['edited_message'] if "edited_message" in update else ""
         #### getting a dict of the text send
         pre_message=str_to_dict(pre_message_inf['text'])

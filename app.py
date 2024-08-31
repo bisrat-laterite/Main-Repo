@@ -32,6 +32,39 @@ def read_gsheet(key, sheet):
     #update_id = gs.cell(1, 2).value
     return gs
 
+
+def str_to_dict(string):
+    ### function to identify the data quality question being responded to 
+    # remove the curly braces from the string
+    string = string.strip(' ').replace('Data Quality Bot', 'Data Quality Bot:None')
+    # split the string into key-value pairs
+    pairs = string.split('\n')
+    # print(pairs)
+    pre= {key[0].rstrip().lstrip():key[1].rstrip().lstrip() for key in (pair.split(':') for pair in pairs) if key[0].rstrip().lstrip() in ['HHID', 'Variable', 'FC Name', 'Project ID']}
+    # print(pre)
+    return pre
+
+def getting_responses(gs,main_text, text):
+    """getting responses from the enumerator"""
+    find_key=main_text['HHID']
+    find_variable=main_text['Variable']
+    # finding hhid
+    hhid=[]
+    # print(text)
+    # the filter to be abstracted away
+    [hhid.append(l.row) for l in gs.findall(find_key)]
+    # finding variable
+    variable=[]
+    # the filter to be abstracted away
+    [variable.append(l.row) for l in gs.findall(find_variable)]
+    row=list(set(hhid).intersection(variable))
+    print(row)
+    for r in row:
+        # val = gs.cell(r, 11).value
+        # print(val)
+        # if val== None:
+        gs.update_cell(r, 11, text)
+
 # def exponential_backoff_request(func, *args, **kwargs):
 #     max_attempts = 5
 #     for attempt in range(max_attempts):
@@ -72,53 +105,75 @@ def send_message_main(chat_id,text):
 def webhook():
     """Handle incoming updates from Telegram."""
     update = request.json
-    ###second part
-    if 'message' in update:
-        chat_id = update['message']['chat']['id']
-        text = update['message'].get('text', '')
 
-    if text.startswith('/'):
-        # command, *args = text.split()
-        command=text.split(" ")[0]
-        command, *args = text.split(" ")
-        if command == '/start':
-            send_message(chat_id, "Welcome! Use /help to see available commands.")
+    if 'reply_to_message' not in update:
+        ### handling requests
+        if 'message' in update:
+            chat_id = update['message']['chat']['id']
+            text = update['message'].get('text', '')
 
-        elif command == '/dq':
-            if len(text.split(" "))==2:
-                args=text.split(" ")[1]
-                main=read_gsheet(main_sheet_key, main_sheet_name)
-                main_content=pd.DataFrame(main.get_all_records())
-                ### project key
-                ### Checking 
-                if args in list(main_content['project_id']):
-                    key=list(main_content[main_content['project_id']==args]['key'])[0]
-                    ### project manager
-                    manager=list(main_content[main_content['project_id']==args]['manager'])[0]
-                    ### if key not found send an error message
-                    # project_key=project_link.replace('//', '/').split('/')[4]
-                    # send_message(chat_id, key)
-                    try:
-                        a=read_gsheet(key, "Data Quality - General")
-                        content=pd.DataFrame(a.get_all_records())
-                        filtered=content[content['chat_id']==chat_id]
-                        ### send only pending/ clarification needed comments
-                        filtered=filtered[filtered['Status'].isin(["Pending", "Clarification Needed"])]
-                        for index, row in filtered.iterrows():
-                            text=(str(dict(row)))
-                            text =  "<a href='https://www.laterite.com/'>Data Quality Bot</a>" \
-                            + "\n" + f"<b>Enumerator Name: </b>"+ row['Enumerator'] + \
-                                "\n" +   f"<b>HHID: </b>" + str(row['HHID'])  + \
-                                "\n" +   f"<b>Variable: </b>" + row['Variable'] \
-                                +  "\n" +   f"<b>Data Quality Question :</b>" + row['issue_description'] \
-                            + "\n" +  f"<b>Project ID: </b> "+ args
-                            send_message_main(chat_id, text)
-                        # send_message(chat_id, "success")
-                    except:
-                        send_message(chat_id, f"Some error let the project manager ({manager}/Bisrat) know")
-                else:
-                     send_message(chat_id, f"the project id you specified({args}) is wrong. Please try again with the right project id.")
+        if text.startswith('/'):
+            # command, *args = text.split()
+            command=text.split(" ")[0]
+            command, *args = text.split(" ")
+            if command == '/start':
+                send_message(chat_id, "Welcome! Use /help to see available commands.")
 
+            elif command == '/dq':
+                if len(text.split(" "))==2:
+                    args=text.split(" ")[1]
+                    main=read_gsheet(main_sheet_key, main_sheet_name)
+                    main_content=pd.DataFrame(main.get_all_records())
+                    ### project key
+                    ### Checking 
+                    if args in list(main_content['project_id']):
+                        key=list(main_content[main_content['project_id']==args]['key'])[0]
+                        ### project manager
+                        manager=list(main_content[main_content['project_id']==args]['manager'])[0]
+                        ### if key not found send an error message
+                        # project_key=project_link.replace('//', '/').split('/')[4]
+                        # send_message(chat_id, key)
+                        try:
+                            a=read_gsheet(key, "Data Quality - General")
+                            content=pd.DataFrame(a.get_all_records())
+                            filtered=content[content['chat_id']==chat_id]
+                            ### send only pending/ clarification needed comments
+                            filtered=filtered[filtered['Status'].isin(["Pending", "Clarification Needed"])]
+                            for index, row in filtered.iterrows():
+                                text=(str(dict(row)))
+                                text =  "<a href='https://www.laterite.com/'>Data Quality Bot</a>" \
+                                + "\n" + f"<b>Enumerator Name: </b>"+ row['Enumerator'] + \
+                                    "\n" +   f"<b>HHID: </b>" + str(row['HHID'])  + \
+                                    "\n" +   f"<b>Variable: </b>" + row['Variable'] \
+                                    +  "\n" +   f"<b>Data Quality Question :</b>" + row['issue_description'] \
+                                + "\n" +  f"<b>Project ID: </b> "+ args
+                                send_message_main(chat_id, text)
+                            # send_message(chat_id, "success")
+                        except:
+                            send_message(chat_id, f"Some error let the project manager ({manager}/Bisrat) know")
+                    else:
+                        send_message(chat_id, f"the project id you specified({args}) is wrong. Please try again with the right project id.")
+    if 'reply_to_message' in update:   
+    # handling responses
+        pre_message_inf=update['reply_to_message']
+        message=update['message'] if 'message' in update else update['edited_message'] if "edited_message" in update else ""
+        #### getting a dict of the text send
+        pre_message=str_to_dict(pre_message_inf['text'])
+        ### editing the main sheet
+        if 'text' in message.keys():
+            reply_text=message['text']
+            ### retrieve project_id
+            project_id=pre_message['Project ID']
+            main=read_gsheet(main_sheet_key, main_sheet_name)
+            main_content=pd.DataFrame(main.get_all_records())
+            key=list(main_content[main_content['project_id']==project_id]['key'])[0]
+            ### reading the gsheet
+            gs=read_gsheet(key, "Data Quality - General")
+            ### updating the sheet
+            getting_responses(gs, pre_message, reply_text)
+        else:
+            ### if enumerator did not respond in the right format send message notifiying
+            send_message(chat_id, "Please respond in a written format. Thank you!")
 
                     
     return 'OK', 200

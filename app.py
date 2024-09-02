@@ -138,7 +138,7 @@ def webhook():
                             filtered=content[content['chat_id']==chat_id]
                             ### send only pending/ clarification needed comments
                             filtered=filtered[filtered['Status'].isin(["Pending", "Clarification Needed"])]
-                            filtered=filtered[filtered['Enumerator Response']!=""]
+                            filtered=filtered[filtered['Enumerator Response']==""]
                             for index, row in filtered.iterrows():
                                 text=(str(dict(row)))
                                 text =  "<a href='https://www.laterite.com/'>Data Quality Bot</a>" \

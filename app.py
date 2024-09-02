@@ -138,6 +138,7 @@ def webhook():
                             filtered=content[content['chat_id']==chat_id]
                             ### send only pending/ clarification needed comments
                             filtered=filtered[filtered['Status'].isin(["Pending", "Clarification Needed"])]
+                            filtered=filtered[filtered['Enumerator Response']!=""]
                             for index, row in filtered.iterrows():
                                 text=(str(dict(row)))
                                 text =  "<a href='https://www.laterite.com/'>Data Quality Bot</a>" \
@@ -154,7 +155,6 @@ def webhook():
                         send_message(chat_id, f"the project id you specified({args}) is wrong. Please try again with the right project id.")
     if 'reply_to_message' in update['message']:   
     # handling responses
-        print(update)
         pre_message_inf=update['message']['reply_to_message']
         message=update['message'] if 'message' in update else update['edited_message'] if "edited_message" in update else ""
         #### getting a dict of the text send

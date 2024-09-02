@@ -153,6 +153,8 @@ def webhook():
                                 send_message(chat_id, f"Some error let the project manager ({manager}/Bisrat) know")
                         else:
                             send_message(chat_id, f"the project id you specified({args}) is wrong. Please try again with the right project id.")
+                    else:
+                        send_message(chat_id, f"the command [dq] takes one argment(only one) eg. /dq wb_tst_1, Please try again with the correct format!")
         if 'reply_to_message' in update['message']:   
         # handling responses
             pre_message_inf=update['message']['reply_to_message']

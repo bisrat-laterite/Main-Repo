@@ -117,7 +117,7 @@ def webhook():
                 command, *args = text.split(" ")
                 if command == '/start':
                     send_message(chat_id, "Welcome! Use /help to see available commands.")
-
+                ###  using the /dq command
                 elif command == '/dq':
                     if len(text.split(" "))==2:
                         args=text.split(" ")[1]
@@ -154,7 +154,47 @@ def webhook():
                         else:
                             send_message(chat_id, f"the project id you specified({args}) is wrong. Please try again with the right project id.")
                     else:
-                        send_message(chat_id, f"the command [dq] takes one argment(only one) eg. /dq wb_tst_1, Please try again with the correct format!")
+                        send_message(chat_id, f"the command /dq takes one argument(only one) eg. /dq wb_tst_1, Please try again with the correct format!")
+            ### translation sheet
+            elif command == '/tr':
+                if len(text.split(" "))==2:
+                    args=text.split(" ")[1]
+                    main=read_gsheet(main_sheet_key, main_sheet_name)
+                    main_content=pd.DataFrame(main.get_all_records())
+                    ### project key
+                    ### Checking 
+                    if args in list(main_content['project_id']):
+                        key=list(main_content[main_content['project_id']==args]['key'])[0]
+                        ### project manager
+                        manager=list(main_content[main_content['project_id']==args]['manager'])[0]
+                        ### if key not found send an error message
+                        # project_key=project_link.replace('//', '/').split('/')[4]
+                        # send_message(chat_id, key)
+                        try:
+                            a=read_gsheet(key, "Data Quality - Translations")
+                            content=pd.DataFrame(a.get_all_records())
+                            filtered=content[content['chat_id']==chat_id]
+                            ### send only pending/ clarification needed comments
+                            filtered=filtered[filtered['TASK_STATUS'].isin(["Pending", "Clarification Needed"])]
+                            filtered=filtered[filtered['Field_Response']==""]
+                            for index, row in filtered.iterrows():
+                                text=(str(dict(row)))
+                                text =  "<a href='https://www.laterite.com/'>Data Quality Bot</a>" \
+                                + "\n" + f"<b>Enumerator Name: </b>"+ row['enum_name'] + \
+                                    "\n" +   f"<b>HHID: </b>" + str(row['HHID'])  + \
+                                    "\n" +   f"<b>Variable: </b>" + row['Variable'] \
+                                    +  "\n" +   f"<b>Translation Item :</b>" + row['item to translate'] \
+                                    + "\n" + f"<b>Task :</b> Translation" \
+                                + "\n" +  f"<b>Project ID: </b> "+ args
+                                send_message_main(chat_id, text)
+                            # send_message(chat_id, "success")
+                        except:
+                            send_message(chat_id, f"Some error let the project manager ({manager}/Bisrat) know")
+                    else:
+                        send_message(chat_id, f"the project id you specified({args}) is wrong. Please try again with the right project id.")
+                else:
+                    send_message(chat_id, f"the command /tr takes one argument(only one) eg. /tr wb_tst_1, Please try again with the correct format!")
+    
         if 'reply_to_message' in update['message']:   
         # handling responses
             pre_message_inf=update['message']['reply_to_message']

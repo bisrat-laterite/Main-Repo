@@ -173,7 +173,7 @@ def webhook():
                             try:
                                 a=read_gsheet(key, "Data Quality - Translations")
                                 content=pd.DataFrame(a.get_all_records())
-                                filtered=content[content['chat_id']==chat_id]
+                                filtered=content[content['enum_chat']==chat_id]
                                 ### send only pending/ clarification needed comments
                                 filtered=filtered[filtered['TASK_STATUS'].isin(["Pending", "Clarification Needed"])]
                                 filtered=filtered[filtered['Field_Response']==""]
@@ -183,9 +183,9 @@ def webhook():
                                     + "\n" + f"<b>Enumerator Name: </b>"+ row['enum_name'] + \
                                         "\n" +   f"<b>HHID: </b>" + str(row['HHID'])  + \
                                         "\n" +   f"<b>Variable: </b>" + row['Variable'] \
-                                        +  "\n" +   f"<b>Translation Item :</b>" + row['item to translate'] \
+                                        +  "\n" +   f"<b>Translation Item :</b>" + row['item_to_translate'] \
                                         + "\n" + f"<b>Task :</b> Translation" \
-                                    + "\n" +  f"<b>Project ID: </b> "+ args
+                                    + "\n" +  f"<b>Project ID: </b> "+ args                      
                                     send_message_main(chat_id, text)
                                 # send_message(chat_id, "success")
                             except:

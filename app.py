@@ -44,7 +44,7 @@ def str_to_dict(string):
     # print(pre)
     return pre
 
-def getting_responses(gs,main_text, text):
+def getting_responses(gs,main_text, text, column):
     """getting responses from the enumerator"""
     find_key=main_text['HHID']
     find_variable=main_text['Variable']
@@ -63,7 +63,7 @@ def getting_responses(gs,main_text, text):
         # val = gs.cell(r, 11).value
         # print(val)
         # if val== None:
-        gs.update_cell(r, 11, text)
+        gs.update_cell(r, column, text)
 
 # def exponential_backoff_request(func, *args, **kwargs):
 #     max_attempts = 5
@@ -210,10 +210,20 @@ def webhook():
                 main=read_gsheet(main_sheet_key, main_sheet_name)
                 main_content=pd.DataFrame(main.get_all_records())
                 key=list(main_content[main_content['project_id']==project_id]['key'])[0]
+
+                ### identifying which sheet to edit
+                if pre_message['Task']=="Translation":
+                    name_sheet="Data Quality - Translations"
+                    row_cell=12
+                elif pre_message['Task']=="Data quality":
+                    name_sheet="Data Quality - General"
+                    row_cell=11
+                else:
+                    return None
                 ### reading the gsheet
-                gs=read_gsheet(key, "Data Quality - General")
+                gs=read_gsheet(key, name_sheet)
                 ### updating the sheet
-                getting_responses(gs, pre_message, reply_text)
+                getting_responses(gs, pre_message, reply_text, row_cell)
             else:
                 ### if enumerator did not respond in the right format send message notifiying
                 send_message(chat_id, "Please respond in a written format. Thank you!")

@@ -203,31 +203,34 @@ def webhook():
             #### getting a dict of the text send
             pre_message=str_to_dict(pre_message_inf['text'])
             ### editing the main sheet
-            if 'text' in message.keys() and  pre_message !={}:
-                reply_text=message['text']
-                ### retrieve project_id
-                project_id=pre_message['Project ID']
-                main=read_gsheet(main_sheet_key, main_sheet_name)
-                main_content=pd.DataFrame(main.get_all_records())
-                key=list(main_content[main_content['project_id']==project_id]['key'])[0]
+            if pre_message!={}:
+                if 'text' in message.keys():
+                    reply_text=message['text']
+                    ### retrieve project_id
+                    project_id=pre_message['Project ID']
+                    main=read_gsheet(main_sheet_key, main_sheet_name)
+                    main_content=pd.DataFrame(main.get_all_records())
+                    key=list(main_content[main_content['project_id']==project_id]['key'])[0]
 
-                ### identifying which sheet to edit
-                if pre_message['Task']=="Translation":
-                    name_sheet="Data Quality - Translations"
-                    row_cell=12
-                elif pre_message['Task']=="Data quality":
-                    # pre_message['Task']=="Data quality"
-                    name_sheet="Data Quality - General"
-                    row_cell=11
+                    ### identifying which sheet to edit
+                    if pre_message['Task']=="Translation":
+                        name_sheet="Data Quality - Translations"
+                        row_cell=12
+                    elif pre_message['Task']=="Data quality":
+                        # pre_message['Task']=="Data quality"
+                        name_sheet="Data Quality - General"
+                        row_cell=11
+                    else:
+                        send_message(chat_id, "Only respond to data quality and translation request.")
+                    ### reading the gsheet
+                    gs=read_gsheet(key, name_sheet)
+                    ### updating the sheet
+                    getting_responses(gs, pre_message, reply_text, row_cell)
                 else:
-                    send_message(chat_id, "Only respond to data quality and translation request.")
-                ### reading the gsheet
-                gs=read_gsheet(key, name_sheet)
-                ### updating the sheet
-                getting_responses(gs, pre_message, reply_text, row_cell)
+                    send_message(chat_id, "Please respond only in written format. Thank you")
             else:
                 ### if enumerator did not respond in the right format send message notifiying
-                send_message(chat_id, "Please respond in a written format. Thank you!")
+                send_message(chat_id, "Only respond to data quality and translation request.")
 
                     
     return 'OK', 200

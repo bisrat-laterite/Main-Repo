@@ -81,6 +81,12 @@ def getting_responses(gs,main_text, text, column):
 
 # def append_to_sheet(worksheet, row_data):
 #     exponential_backoff_request(worksheet.append_row, row_data)
+def sendpoll(chat_id, options,text):
+    """Send a names to a user."""
+    url = TELEGRAM_API_URL + 'sendMessage'
+    payload = {'chat_id': chat_id, 'question': text, options:'options'}
+    requests.post(url, json=payload)
+    
 
 def send_message(chat_id, text):
     """Send a message to a user."""
@@ -226,6 +232,7 @@ def webhook():
                                 # filtered=content[content['enum_chat']==chat_id]
                                 ### send only pending/ clarification needed comments
                                 result_dict = dict(zip(content['NAME'], content['ID']))
+                                Names_=list(content['NAME'])
                                 # Define the inline keyboard layout
                                 list_of_lists = [[key, value] for key, value in result_dict.items()]
                                 keyboard = {
@@ -234,7 +241,8 @@ def webhook():
                                           for x in list_of_lists]                                    ]
                                 }
                                 text="Please select your name from the list."
-                                send_message_options(chat_id, text,keyboard)
+                                # send_message_options(chat_id, text,keyboard)
+                                sendpoll(chat_id, Names_,text)
                             except:
                                 send_message(chat_id, f"Some error let the project manager ({manager}/Bisrat) know")
                         else:

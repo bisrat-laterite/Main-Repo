@@ -11,8 +11,8 @@ import time
 app = Flask(__name__)
 
 # Replace with your bot's token from BotFather
-TELEGRAM_BOT_TOKEN = 'YOUR_BOT_TOKEN_HERE'
-TELEGRAM_API_URL = 'https://api.telegram.org/bot6081280787:AAF3HKZAORELluBhj0A90cv62QAWd8ex_Hw/'
+TELEGRAM_BOT_TOKEN = os.getenv("Bot_token")
+TELEGRAM_API_URL = f'https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/'
 main_sheet_key='1kq0JxL3PxB4yxZfBv_2_WOEHvy6kptP7jqB31v0XZoU'
 main_sheet_name='project_database'
 

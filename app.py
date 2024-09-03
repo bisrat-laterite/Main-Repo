@@ -139,6 +139,8 @@ def webhook():
                                 ### send only pending/ clarification needed comments
                                 filtered=filtered[filtered['Status'].isin(["Pending", "Clarification Needed"])]
                                 filtered=filtered[filtered['Enumerator Response']==""]
+                                if filtered.empty():
+                                    send_message(chat_id, "Thank you for all your responses. You have no data quality items remaining under your name")
                                 for index, row in filtered.iterrows():
                                     text=(str(dict(row)))
                                     text =  "<a href='https://www.laterite.com/'>Data Quality Bot</a>" \
@@ -178,6 +180,8 @@ def webhook():
                                 ### send only pending/ clarification needed comments
                                 filtered=filtered[filtered['TASK_STATUS'].isin(["Pending", "Clarification Needed"])]
                                 filtered=filtered[filtered['Field_Response']==""]
+                                if filtered.empty():
+                                    send_message(chat_id, "Thank you for all your responses. You have no translations remaining under your name")
                                 for index, row in filtered.iterrows():
                                     text=(str(dict(row)))
                                     text =  "<a href='https://www.laterite.com/'>Data Quality Bot</a>" \

@@ -226,8 +226,14 @@ def webhook():
                                 # filtered=content[content['enum_chat']==chat_id]
                                 ### send only pending/ clarification needed comments
                                 result_dict = dict(zip(content['NAME'], content['ID']))
-                                send_message(chat_id, str(result_dict))
-
+                                # Define the inline keyboard layout
+                                list_of_lists = [[key, value] for key, value in result_dict.items()]
+                                keyboard = {
+                                    "inline_keyboard": [
+                                        [{"text": x[0], "callback_data": x[1]} for x in list_of_lists]                                    ]
+                                }
+                                text="Please select your name from the list."
+                                send_message_options(chat_id, text,keyboard)
                             except:
                                 send_message(chat_id, f"Some error let the project manager ({manager}/Bisrat) know")
                         else:

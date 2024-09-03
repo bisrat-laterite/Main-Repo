@@ -195,7 +195,7 @@ def webhook():
                             send_message(chat_id, f"the project id you specified({args}) is wrong. Please try again with the right project id.")
                     else:
                         send_message(chat_id, f"the command /tr takes one argument(only one) eg. /tr wb_tst_1, Please try again with the correct format!")
-    
+    # message.reply_to_message.from.first_name==""
         if 'reply_to_message' in update['message']:   
         # handling responses
             pre_message_inf=update['message']['reply_to_message']
@@ -215,11 +215,12 @@ def webhook():
                 if pre_message['Task']=="Translation":
                     name_sheet="Data Quality - Translations"
                     row_cell=12
-                elif pre_message['Task']=="Data quality":
+                else:
+                    # pre_message['Task']=="Data quality"
                     name_sheet="Data Quality - General"
                     row_cell=11
-                else:
-                    return None
+                # else:
+                    #send_message(chat_id, "Only respond to data quality and translation request.")
                 ### reading the gsheet
                 gs=read_gsheet(key, name_sheet)
                 ### updating the sheet

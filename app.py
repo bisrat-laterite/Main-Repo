@@ -203,7 +203,7 @@ def webhook():
             #### getting a dict of the text send
             pre_message=str_to_dict(pre_message_inf['text'])
             ### editing the main sheet
-            if 'text' in message.keys():
+            if 'text' in message.keys() and  pre_message !={}:
                 reply_text=message['text']
                 ### retrieve project_id
                 project_id=pre_message['Project ID']
@@ -215,12 +215,12 @@ def webhook():
                 if pre_message['Task']=="Translation":
                     name_sheet="Data Quality - Translations"
                     row_cell=12
-                else:
+                elif pre_message['Task']=="Data quality":
                     # pre_message['Task']=="Data quality"
                     name_sheet="Data Quality - General"
                     row_cell=11
-                # else:
-                    #send_message(chat_id, "Only respond to data quality and translation request.")
+                else:
+                    send_message(chat_id, "Only respond to data quality and translation request.")
                 ### reading the gsheet
                 gs=read_gsheet(key, name_sheet)
                 ### updating the sheet

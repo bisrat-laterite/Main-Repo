@@ -230,7 +230,7 @@ def webhook():
                                 list_of_lists = [[key, value] for key, value in result_dict.items()]
                                 keyboard = {
                                     "inline_keyboard": [
-                                        [{"text": x[0], "callback_data": x[1]}
+                                        [{"text": x[0], "callback_data": x[1]} \
                                           for x in list_of_lists]                                    ]
                                 }
                                 text="Please select your name from the list."

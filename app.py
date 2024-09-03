@@ -84,7 +84,7 @@ def getting_responses(gs,main_text, text, column):
 def sendpoll(chat_id, options,text):
     """Send a names to a user."""
     url = TELEGRAM_API_URL + 'sendPoll'
-    payload = {'chat_id': chat_id, 'question': text, 'options':options}
+    payload = {'chat_id': chat_id, 'question': text, 'options':options, 'is_anonymous':False}
     requests.post(url, json=payload)
     
 

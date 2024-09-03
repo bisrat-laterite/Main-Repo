@@ -83,7 +83,7 @@ def getting_responses(gs,main_text, text, column):
 #     exponential_backoff_request(worksheet.append_row, row_data)
 def sendpoll(chat_id, options,text):
     """Send a names to a user."""
-    url = TELEGRAM_API_URL + 'sendMessage'
+    url = TELEGRAM_API_URL + 'sendPoll'
     payload = {'chat_id': chat_id, 'question': text, options:'options'}
     requests.post(url, json=payload)
     

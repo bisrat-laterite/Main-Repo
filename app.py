@@ -316,7 +316,7 @@ def webhook():
         try:
             enum=read_gsheet(key, "ENUM_LIST")
             # a=list(pd.DataFrame(enum.get_all_records())['NAME'])[option]
-            enum.update_cell(option+1, 3, str(user_id))
+            enum.update_cell(option+2, 3, str(user_id))
         except:
             send_message(user_id, f"Some error please contact bisrat!")
         ### updating the list based on the 

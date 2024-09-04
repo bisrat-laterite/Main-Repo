@@ -243,8 +243,8 @@ def webhook():
                                 content=pd.DataFrame(a.get_all_records())
                                 # filtered=content[content['enum_chat']==chat_id]
                                 ### send only pending/ clarification needed comments
-                                content['Name_project']=content['NAME']+" "+f"[{args}]"
-                                Names_=list(content['Name_project'])
+                                # content['Name_project']=content['NAME']+" "+f"[{args}]"
+                                Names_=list(content['NAME'])
                                 text="Please select your name from the list."
                                 # send_message_options(chat_id, text,keyboard)
                                 response=sendpoll(chat_id, Names_,text)

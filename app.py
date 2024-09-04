@@ -87,6 +87,14 @@ def sendpoll(chat_id, options,text):
     payload = {'chat_id': chat_id, 'question': text, 'options':options, 'is_anonymous':False}
     requests.post(url, json=payload)
 
+def handle_poll_result(poll_answer):
+    if poll_answer:
+        user_id = poll_answer['user']['id']
+        option_ids = poll_answer['option_ids']  # This is a list of selected option indices
+        # For simplicity, assume single answer poll
+        option_ids = option_ids[0] if option_ids else None
+        return user_id, option_ids
+
 
     
 def send_message(chat_id, text):
@@ -118,6 +126,7 @@ def send_message_main(chat_id,text):
 def webhook():
     """Handle incoming updates from Telegram."""
     update = request.json
+    poll_answer = update.get('poll_answer', '')
         ### handling requests
     if 'message' in update:
         chat_id = update['message']['chat']['id']
@@ -287,7 +296,12 @@ def webhook():
                 ### if enumerator did not respond in the right format send message notifiying
                 send_message(chat_id, "Only respond to data quality and translation requests.")
 
-                    
+    elif poll_answer!="":
+        ## retrieve chat id and what not
+        user_id=handle_poll_result(poll_answer)[0]
+        option=handle_poll_result(poll_answer)[1]
+        send_message(user_id, f"you selected {option}")
+
     return 'OK', 200
 
 if __name__ == '__main__':

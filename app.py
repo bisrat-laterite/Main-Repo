@@ -318,7 +318,7 @@ def webhook():
             enum_df=pd.DataFrame(enum.get_all_records())
             chat_ids=list(enum_df['CHAT_ID'])
             if user_id in chat_ids:
-                send_message(chat_id, "You have already registered!")
+                send_message(user_id, "You have already registered!")
             # a=list(pd.DataFrame(enum.get_all_records())['NAME'])[option]
             else:
                 enum.update_cell(option+2, 3, str(user_id))

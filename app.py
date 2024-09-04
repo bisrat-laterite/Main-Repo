@@ -87,10 +87,8 @@ def sendpoll(chat_id, options,text):
     payload = {'chat_id': chat_id, 'question': text, 'options':options, 'is_anonymous':False}
     requests.post(url, json=payload)
 
-def getpoll(update):
 
     
-
 def send_message(chat_id, text):
     """Send a message to a user."""
     url = TELEGRAM_API_URL + 'sendMessage'

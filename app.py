@@ -300,7 +300,9 @@ def webhook():
         ## retrieve chat id and what not
         user_id=handle_poll_result(poll_answer)[0]
         option=handle_poll_result(poll_answer)[1]
-        send_message(user_id, f"you selected {option}")
+        poll = update['poll']
+        poll_question = poll['question']
+        send_message(user_id, f"you selected {option} for the question {poll_question}")
 
     return 'OK', 200
 

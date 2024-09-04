@@ -315,7 +315,8 @@ def webhook():
         key=list(main_content[main_content['project_id']==project_id]['key'])[0]
         try:
             enum=read_gsheet(key, "ENUM_LIST")
-            chat_ids=list(pd.DataFrame(enum.get_all_records())['CHAT_ID'])
+            enum_df=pd.DataFrame(enum.get_all_records())
+            chat_ids=list(enum_df['CHAT_ID'])
             if user_id in chat_ids:
                 send_message(chat_id, "You have already registered!")
             # a=list(pd.DataFrame(enum.get_all_records())['NAME'])[option]

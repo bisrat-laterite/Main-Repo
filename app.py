@@ -86,6 +86,9 @@ def sendpoll(chat_id, options,text):
     url = TELEGRAM_API_URL + 'sendPoll'
     payload = {'chat_id': chat_id, 'question': text, 'options':options, 'is_anonymous':False}
     requests.post(url, json=payload)
+
+def getpoll(update):
+
     
 
 def send_message(chat_id, text):
@@ -231,8 +234,9 @@ def webhook():
                                 content=pd.DataFrame(a.get_all_records())
                                 # filtered=content[content['enum_chat']==chat_id]
                                 ### send only pending/ clarification needed comments
+                                content['Name_project']=content['NAME']+" "+f"[{args}]"
                                 result_dict = dict(zip(content['NAME'], content['ID']))
-                                Names_=list(content['NAME'])
+                                Names_=list(content['Name_project'])
                                 # Define the inline keyboard layout
                                 list_of_lists = [[key, value] for key, value in result_dict.items()]
                                 keyboard = {
@@ -248,7 +252,7 @@ def webhook():
                         else:
                             send_message(chat_id, f"the project id you specified({args}) is wrong. Please try again with the right project id.")
                     else:
-                        send_message(chat_id, f"the command /tr takes one argument(only one) eg. /tr wb_tst_1, Please try again with the correct format!")
+                        send_message(chat_id, f"the command /rg takes one argument(only one) eg. /rg wb_tst_1, Please try again with the correct format!")
         if 'reply_to_message' in update['message']:   
         # handling responses
             pre_message_inf=update['message']['reply_to_message']

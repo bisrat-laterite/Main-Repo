@@ -255,7 +255,7 @@ def webhook():
                                         poll_id = poll_info['result']['poll']['id']
                                         gs=read_gsheet(main_sheet_key, "Polling")
                                         value=ast.literal_eval(gs.cell(1, 1).value)
-                                        value['poll_id']=args
+                                        value[poll_id]=args
                                         gs.update_cell(1, 1, str(value))
                             except:
                                 send_message(chat_id, f"Some error let the project manager ({manager}/Bisrat) know")

@@ -6,6 +6,7 @@ import os
 import base64
 from google.auth.exceptions import GoogleAuthError
 import time
+import ast
 # from googleapiclient.errors import HttpError
 
 app = Flask(__name__)
@@ -85,7 +86,8 @@ def sendpoll(chat_id, options,text):
     """Send a names to a user."""
     url = TELEGRAM_API_URL + 'sendPoll'
     payload = {'chat_id': chat_id, 'question': text, 'options':options, 'is_anonymous':False}
-    requests.post(url, json=payload)
+    response=requests.post(url, json=payload)
+    return response
 
 def handle_poll_result(poll_answer):
     if poll_answer:
@@ -242,11 +244,19 @@ def webhook():
                                 # filtered=content[content['enum_chat']==chat_id]
                                 ### send only pending/ clarification needed comments
                                 content['Name_project']=content['NAME']+" "+f"[{args}]"
-                                result_dict = dict(zip(content['NAME'], content['ID']))
                                 Names_=list(content['Name_project'])
                                 text="Please select your name from the list."
                                 # send_message_options(chat_id, text,keyboard)
-                                sendpoll(chat_id, Names_,text)
+                                response=sendpoll(chat_id, Names_,text)
+                                if response.status_code == 200:
+                                        # Parse the response JSON
+                                        poll_info = response.json()
+                                        # Extract the poll_id
+                                        poll_id = poll_info['result']['poll']['id']
+                                        gs=read_gsheet(main_sheet_key, "Polling")
+                                        value=ast.literal_eval(gs.cell(1, 1).value)
+                                        value['poll_id']=args
+                                        gs.update_cell(1, 1, str(value))
                             except:
                                 send_message(chat_id, f"Some error let the project manager ({manager}/Bisrat) know")
                         else:

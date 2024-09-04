@@ -91,9 +91,9 @@ def handle_poll_result(poll_answer):
     if poll_answer:
         user_id = poll_answer['user']['id']
         option_ids = poll_answer['option_ids']  # This is a list of selected option indices
-        # For simplicity, assume single answer poll
+        poll_id= poll_answer['poll_id']
         option_ids = option_ids[0] if option_ids else None
-        return user_id, option_ids
+        return user_id, option_ids, poll_id
 
 
     
@@ -244,13 +244,6 @@ def webhook():
                                 content['Name_project']=content['NAME']+" "+f"[{args}]"
                                 result_dict = dict(zip(content['NAME'], content['ID']))
                                 Names_=list(content['Name_project'])
-                                # Define the inline keyboard layout
-                                list_of_lists = [[key, value] for key, value in result_dict.items()]
-                                keyboard = {
-                                    "inline_keyboard": [
-                                        [{"text": x[0], "callback_data": x[1]} \
-                                          for x in list_of_lists]                                    ]
-                                }
                                 text="Please select your name from the list."
                                 # send_message_options(chat_id, text,keyboard)
                                 sendpoll(chat_id, Names_,text)
@@ -300,9 +293,8 @@ def webhook():
         ## retrieve chat id and what not
         user_id=handle_poll_result(poll_answer)[0]
         option=handle_poll_result(poll_answer)[1]
-        poll = update['poll']
-        poll_question = poll['question']
-        send_message(user_id, f"you selected {option} for the question {poll_question}")
+        poll_id=handle_poll_result(poll_answer)[2]
+        send_message(user_id, f"you selected {option} for poll id {poll_id}")
 
     return 'OK', 200
 

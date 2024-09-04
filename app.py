@@ -304,7 +304,23 @@ def webhook():
         user_id=handle_poll_result(poll_answer)[0]
         option=handle_poll_result(poll_answer)[1]
         poll_id=handle_poll_result(poll_answer)[2]
-        send_message(user_id, f"you selected {option} for poll id {poll_id}")
+        ### reading the gsheet containing information about polling
+        polling_=read_gsheet(main_sheet_key, "Polling").cell(1, 1).value
+        value=ast.literal_eval(polling_)
+        project_id=value[str(poll_id)]
+
+        ### reading the main sheet
+        main=read_gsheet(main_sheet_key, main_sheet_name)
+        main_content=pd.DataFrame(main.get_all_records())
+        key=list(main_content[main_content['project_id']==project_id]['key'])[0]
+        try:
+            enum=read_gsheet(key, "ENUM_LIST")
+            # a=list(pd.DataFrame(enum.get_all_records())['NAME'])[option]
+            enum.update_cell(option+1, 3, str(user_id))
+        except:
+            send_message(user_id, f"Some error please contact bisrat!")
+        ### updating the list based on the 
+        # send_message(user_id, f"you selected {option} for poll id {poll_id}")
 
     return 'OK', 200
 

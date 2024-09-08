@@ -102,7 +102,7 @@ def handle_poll_result(poll_answer):
 def send_message(chat_id, text):
     """Send a message to a user."""
     url = TELEGRAM_API_URL + 'sendMessage'
-    payload = {'chat_id': chat_id, 'text': text}
+    payload = {'chat_id': chat_id, 'text': text, 'parse_mode':'HTML'}
     requests.post(url, json=payload)
 
 def send_message_options(chat_id, text,keyboard):

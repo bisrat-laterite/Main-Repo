@@ -156,30 +156,35 @@ def webhook():
                             ### if key not found send an error message
                             # project_key=project_link.replace('//', '/').split('/')[4]
                             # send_message(chat_id, key)
-                            try:
-                                a=read_gsheet(key, "Data Quality - General")
-                                content=pd.DataFrame(a.get_all_records())
-                                filtered=content[content['chat_id']==chat_id]
-                                ### send only pending/ clarification needed comments
-                                filtered=filtered[filtered['Status'].isin(["Pending", "Clarification Needed"])]
-                                filtered=filtered[filtered['Enumerator Response']==""]
-                                if filtered.shape[0]==0:
-                                    send_message(chat_id, "Thank you for all your responses. You have no data quality items remaining under your name")
-                                for index, row in filtered.iterrows():
-                                    text=(str(dict(row)))
-                                    text =  "<a href='https://www.laterite.com/'>Data Quality Bot</a>" \
-                                    + "\n" + f"<b>Enumerator Name: </b>"+ row['Enumerator'] + \
-                                        "\n" +   f"<b>HHID: </b>" + str(row['HHID'])  + \
-                                        "\n" +   f"<b>Variable: </b>" + row['Variable'] \
-                                        +  "\n" +   f"<b>Data Quality Question :</b>" + row['issue_description'] \
-                                        + "\n" + f"<b>Task :</b> Data quality" \
-                                    + "\n" +  f"<b>Project ID: </b> "+ args
-                                    send_message_main(chat_id, text)
-                                # send_message(chat_id, "success")
-                            except:
-                                send_message(chat_id, f"Some error let the project manager ({manager}/Bisrat) know")
+                            enum_list_pre=read_gsheet(key, "ENUM_LIST")
+                            enum_list=list(pd.DataFrame(enum_list_pre.get_all_records())['CHAT_ID'])
+                            if chat_id not in enum_list:
+                                send_message(chat_id, f"You have not yet registered to the {args} project. Please do so using [/rg args] and following the steps accordingly.")
+                            else:
+                                try:
+                                    a=read_gsheet(key, "Data Quality - General")
+                                    content=pd.DataFrame(a.get_all_records())
+                                    filtered=content[content['chat_id']==chat_id]
+                                    ### send only pending/ clarification needed comments
+                                    filtered=filtered[filtered['Status'].isin(["Pending", "Clarification Needed"])]
+                                    filtered=filtered[filtered['Enumerator Response']==""]
+                                    if filtered.shape[0]==0:
+                                        send_message(chat_id, "Thank you for all your responses. You have no data quality items remaining under your name")
+                                    for index, row in filtered.iterrows():
+                                        text=(str(dict(row)))
+                                        text =  "<a href='https://www.laterite.com/'>Data Quality Bot</a>" \
+                                        + "\n" + f"<b>Enumerator Name: </b>"+ row['Enumerator'] + \
+                                            "\n" +   f"<b>HHID: </b>" + str(row['HHID'])  + \
+                                            "\n" +   f"<b>Variable: </b>" + row['Variable'] \
+                                            +  "\n" +   f"<b>Data Quality Question :</b>" + row['issue_description'] \
+                                            + "\n" + f"<b>Task :</b> Data quality" \
+                                        + "\n" +  f"<b>Project ID: </b> "+ args
+                                        send_message_main(chat_id, text)
+                                    # send_message(chat_id, "success")
+                                except:
+                                    send_message(chat_id, f"Some error let the project manager ({manager}/Bisrat) know")
                         else:
-                            send_message(chat_id, f"the project id you specified({args}) is wrong. Please try again with the right project id.")
+                            send_message(chat_id, f"The project id you specified({args}) is wrong. Please try again with the right project id.")
                     else:
                         send_message(chat_id, f"the command /dq takes one argument(only one) eg. /dq wb_tst_1, Please try again with the correct format!")
                 ### translation sheet

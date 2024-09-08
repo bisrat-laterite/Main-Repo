@@ -337,8 +337,9 @@ def webhook():
             dict_=dict(zip(Namez, chat_ids))
             # chat_id_alredy=dict_[Namez[option]]
             if dict_[Namez[option]]!=None:
-                send_message(chat_id, f"Some body {str(dict_[Namez[option]])} has already registered under <b>{Namez[option]}</b>! please, let {manager}/Bisrat know")
+                # send_message(chat_id, f"Some body {str(dict_[Namez[option]])} has already registered under <b>{Namez[option]}</b>! please, let {manager}/Bisrat know")
             # a=list(pd.DataFrame(enum.get_all_records())['NAME'])[option]
+                send_message(user_id, "dfdf")
             else:
                 enum.update_cell(option+2, 3, str(user_id))
         except:

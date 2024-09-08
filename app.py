@@ -328,14 +328,16 @@ def webhook():
         main=read_gsheet(main_sheet_key, main_sheet_name)
         main_content=pd.DataFrame(main.get_all_records())
         key=list(main_content[main_content['project_id']==project_id]['key'])[0]
+        # time.sleep(1)
         try:
             enum=read_gsheet(key, "ENUM_LIST")
             enum_df=pd.DataFrame(enum.get_all_records())
             chat_ids=list(enum_df['CHAT_ID'])
             Namez=list(enum_df['NAME'])
             dict_=dict(zip(Namez, chat_ids))
-            if dict_[Namez[option]]!="":
-                send_message(user_id, f"Some body {dict_[Namez[option]]} has already registered under <b>{Namez[option]}</b>! please, let {manager}/Bisrat know")
+            # chat_id_alredy=dict_[Namez[option]]
+            if dict_[Namez[option]]!=None:
+                send_message(chat_id, f"Some body {str(dict_[Namez[option]])} has already registered under <b>{Namez[option]}</b>! please, let {manager}/Bisrat know")
             # a=list(pd.DataFrame(enum.get_all_records())['NAME'])[option]
             else:
                 enum.update_cell(option+2, 3, str(user_id))

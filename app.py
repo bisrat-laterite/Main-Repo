@@ -108,7 +108,7 @@ def send_message(chat_id, text):
 def send_message_options(chat_id, text,keyboard):
     """Send a message to a user of options to select from"""
     url = TELEGRAM_API_URL + 'sendMessage'
-    payload = {'chat_id': chat_id, 'text': text,'reply_markup': keyboard}
+    payload = {'chat_id': chat_id, 'text': text,'reply_markup': keyboard,'parse_mode':'HTML'}
     requests.post(url, json=payload)
 
 ##function to send the message of the data quality questions 
@@ -271,7 +271,7 @@ def webhook():
                                             gs.update_cell(1, 1, str(value))
                                 else:
                                     pairs_ = dict(zip(chats, Names_))
-                                    send_message(chat_id, f"You have already registered as {pairs_[chat_id]}. Please let the {manager} and/or Bisrat know!")
+                                    send_message(chat_id, f"You have already registered as <b>{pairs_[chat_id]}</b>. Please let {manager} and/or Bisrat know if You are not (<b>{pairs_[chat_id]}</b>)!")
                             except:
                                 send_message(chat_id, f"Some error let the project manager ({manager}/Bisrat) know")
                         else:

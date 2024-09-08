@@ -186,7 +186,7 @@ def webhook():
                         else:
                             send_message(chat_id, f"The project id you specified({args}) is wrong. Please try again with the right project id.")
                     else:
-                        send_message(chat_id, f"the command /dq takes one argument(only one) eg. /dq wb_tst_1, Please try again with the correct format!")
+                        send_message(chat_id, f"The command /dq takes one argument(only one) eg. /dq wb_tst_1, Please try again with the correct format!")
                 ### translation sheet
                 elif command == '/tr':
                     if len(text.split(" "))==2:
@@ -230,9 +230,9 @@ def webhook():
                                 except:
                                     send_message(chat_id, f"Some error let the project manager ({manager}/Bisrat) know")
                         else:
-                            send_message(chat_id, f"the project id you specified({args}) is wrong. Please try again with the right project id.")
+                            send_message(chat_id, f"The project id you specified({args}) is wrong. Please try again with the right project id.")
                     else:
-                        send_message(chat_id, f"the command /tr takes one argument(only one) eg. /tr wb_tst_1, Please try again with the correct format!")
+                        send_message(chat_id, f"The command /tr takes one argument(only one) eg. /tr wb_tst_1, Please try again with the correct format!")
                 ### translation sheet
                 elif command == '/rg':
                     if len(text.split(" "))==2:
@@ -255,24 +255,29 @@ def webhook():
                                 ### send only pending/ clarification needed comments
                                 # content['Name_project']=content['NAME']+" "+f"[{args}]"
                                 Names_=list(content['NAME'])
-                                text="Please select your name from the list."
-                                # send_message_options(chat_id, text,keyboard)
-                                response=sendpoll(chat_id, Names_,text)
-                                if response.status_code == 200:
-                                        # Parse the response JSON
-                                        poll_info = response.json()
-                                        # Extract the poll_id
-                                        poll_id = poll_info['result']['poll']['id']
-                                        gs=read_gsheet(main_sheet_key, "Polling")
-                                        value=ast.literal_eval(gs.cell(1, 1).value)
-                                        value[poll_id]=args
-                                        gs.update_cell(1, 1, str(value))
+                                chats=list(content['CHAT_ID'])
+                                if chat_id not in chats:
+                                    text="Please select your name from the list."
+                                    # send_message_options(chat_id, text,keyboard)
+                                    response=sendpoll(chat_id, Names_,text)
+                                    if response.status_code == 200:
+                                            # Parse the response JSON
+                                            poll_info = response.json()
+                                            # Extract the poll_id
+                                            poll_id = poll_info['result']['poll']['id']
+                                            gs=read_gsheet(main_sheet_key, "Polling")
+                                            value=ast.literal_eval(gs.cell(1, 1).value)
+                                            value[poll_id]=args
+                                            gs.update_cell(1, 1, str(value))
+                                else:
+                                    pairs_ = dict(zip(chats, Names_))
+                                    send_message(chat_id, f"You have already registered as {pairs_[chat_id]}. Please let the {manager} and/or Bisrat know!")
                             except:
                                 send_message(chat_id, f"Some error let the project manager ({manager}/Bisrat) know")
                         else:
-                            send_message(chat_id, f"the project id you specified({args}) is wrong. Please try again with the right project id.")
+                            send_message(chat_id, f"The project id you specified({args}) is wrong. Please try again with the right project id.")
                     else:
-                        send_message(chat_id, f"the command /rg takes one argument(only one) eg. /rg wb_tst_1, Please try again with the correct format!")
+                        send_message(chat_id, f"The command /rg takes one argument(only one) eg. /rg wb_tst_1, Please try again with the correct format!")
         if 'reply_to_message' in update['message']:   
         # handling responses
             pre_message_inf=update['message']['reply_to_message']

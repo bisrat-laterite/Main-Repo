@@ -271,7 +271,7 @@ def webhook():
                                             gs.update_cell(1, 1, str(value))
                                 else:
                                     pairs_ = dict(zip(chats, Names_))
-                                    send_message(chat_id, f"You have already registered as <b>{pairs_[chat_id]}</b>. Please let {manager} and/or Bisrat know if You are not (<b>{pairs_[chat_id]}</b>)!")
+                                    send_message(chat_id, f"You have already registered as <b>{pairs_[chat_id]}</b>. Please let {manager} and/or Bisrat know if you are not <b>{pairs_[chat_id]}</b>!")
                             except:
                                 send_message(chat_id, f"Some error let the project manager ({manager}/Bisrat) know")
                         else:
@@ -332,8 +332,10 @@ def webhook():
             enum=read_gsheet(key, "ENUM_LIST")
             enum_df=pd.DataFrame(enum.get_all_records())
             chat_ids=list(enum_df['CHAT_ID'])
-            if user_id in chat_ids:
-                send_message(user_id, "You have already registered!")
+            Namez=list(enum_df['NAME'])
+            dict_=dict(zip(Namez, chat_ids))
+            if dict_[Namez[option]]!="":
+                send_message(user_id, f"Some body {dict_[Namez[option]]} has already registered under <b>{Namez[option]}</b>! please, let {manager}/Bisrat know")
             # a=list(pd.DataFrame(enum.get_all_records())['NAME'])[option]
             else:
                 enum.update_cell(option+2, 3, str(user_id))

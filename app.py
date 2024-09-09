@@ -269,7 +269,7 @@ def webhook():
                                 Names_=list(content['NAME'])
                                 chats=list(content['CHAT_ID'])
                                 if chat_id not in chats:
-                                    text="Please select your name from the list."
+                                    text=f"Please select your name from the list [{args}]."
                                     send_inline_keyboard(chat_id, Names_, text)
                                     # send_message_options(chat_id, text,keyboard)
                                     # response=sendpoll(chat_id, Names_,text)

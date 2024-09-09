@@ -342,36 +342,39 @@ def webhook():
         match = re.search(pattern, poll_id)
         if match:
             project_id=match.group(1)
+            send_message(chat_id, f"thanks, project is {project_id}")
+        else:
+            send_message(chat_id,f"thanks, no project id found" )
 
             ### reading the gsheet containing information about polling
             # polling_=read_gsheet(main_sheet_key, "Polling").cell(1, 1).value
             # value=ast.literal_eval(polling_)
-            # project_id=value[str(poll_id)]
+        #     # project_id=value[str(poll_id)]
 
-            ### reading the main sheet
-            main=read_gsheet(main_sheet_key, main_sheet_name)
-            main_content=pd.DataFrame(main.get_all_records())
-            key=list(main_content[main_content['project_id']==project_id]['key'])[0]
-            # time.sleep(1)
-            try:
-                enum=read_gsheet(key, "ENUM_LIST")
-                enum_df=pd.DataFrame(enum.get_all_records())
-                chat_ids=list(enum_df['CHAT_ID'])
-                Namez=list(enum_df['NAME'])
-                dict_=dict(zip(Namez, chat_ids))
-                # chat_id_alredy=dict_[Namez[option]]
-                if dict_[Namez[option]]!=None:
-                    # send_message(chat_id, f"Some body {str(dict_[Namez[option]])} has already registered under <b>{Namez[option]}</b>! please, let {manager}/Bisrat know")
-                # a=list(pd.DataFrame(enum.get_all_records())['NAME'])[option]
-                    send_message(user_id, "dfdf")
-                else:
-                    enum.update_cell(option+2, 3, str(user_id))
-            except:
-                send_message(user_id, f"Some error please contact bisrat!")
-            ### updating the list based on the 
-            # send_message(user_id, f"you selected {option} for poll id {poll_id}")
-        else:
-            send_message(user_id, "some error project id not found")
+        #     ### reading the main sheet
+        #     main=read_gsheet(main_sheet_key, main_sheet_name)
+        #     main_content=pd.DataFrame(main.get_all_records())
+        #     key=list(main_content[main_content['project_id']==project_id]['key'])[0]
+        #     # time.sleep(1)
+        #     try:
+        #         enum=read_gsheet(key, "ENUM_LIST")
+        #         enum_df=pd.DataFrame(enum.get_all_records())
+        #         chat_ids=list(enum_df['CHAT_ID'])
+        #         Namez=list(enum_df['NAME'])
+        #         dict_=dict(zip(Namez, chat_ids))
+        #         # chat_id_alredy=dict_[Namez[option]]
+        #         if dict_[Namez[option]]!=None:
+        #             # send_message(chat_id, f"Some body {str(dict_[Namez[option]])} has already registered under <b>{Namez[option]}</b>! please, let {manager}/Bisrat know")
+        #         # a=list(pd.DataFrame(enum.get_all_records())['NAME'])[option]
+        #             send_message(user_id, "dfdf")
+        #         else:
+        #             enum.update_cell(option+2, 3, str(user_id))
+        #     except:
+        #         send_message(user_id, f"Some error please contact bisrat!")
+        #     ### updating the list based on the 
+        #     # send_message(user_id, f"you selected {option} for poll id {poll_id}")
+        # else:
+        #     send_message(user_id, "some error project id not found")
 
     return 'OK', 200
 

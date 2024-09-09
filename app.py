@@ -370,7 +370,7 @@ def webhook():
                 print(dict_)
                 print(option)
                 print(Namez[int(option)])
-                print(dict_[Namez[int(option)]])
+                print(dict_[str(Namez[int(option)])])
                 if dict_[Namez[int(option)]]!="":
                     send_message(user_id, "dfdf")
                 else:

@@ -337,6 +337,7 @@ def webhook():
         user_name=poll_answer['message']['chat'].get('username', '')
         print(user_id, first_name, user_name)
         # # continue
+        
         # ## retrieve chat id and what not
         # # user_id=handle_poll_result(poll_answer)[0]
         # # option=handle_poll_result(poll_answer)[1]
@@ -357,6 +358,7 @@ def webhook():
             main_content=pd.DataFrame(main.get_all_records())
             key=list(main_content[main_content['project_id']==project_id]['key'])[0]
             # time.sleep(1)
+            send_message(user_id, f"success option is {option}, text is {poll_id}")
             try:
                 enum=read_gsheet(key, "ENUM_LIST")
                 enum_df=pd.DataFrame(enum.get_all_records())

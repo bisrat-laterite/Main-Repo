@@ -371,7 +371,7 @@ def webhook():
                 print(option)
                 name=Namez[int(option)]
                 print(dict_[name], "kdfjdkf")
-                if dict_[name]!=None:
+                if dict_[name]!='':
                     send_message(user_id, "dfdf")
                 else:
                     enum.update_cell(option+2, 3, str(user_id))

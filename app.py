@@ -357,7 +357,7 @@ def webhook():
             main=read_gsheet(main_sheet_key, main_sheet_name)
             main_content=pd.DataFrame(main.get_all_records())
             key=list(main_content[main_content['project_id']==project_id]['key'])[0]
-            # time.sleep(1)
+            print(key)
             send_message(user_id, f"success option is {option}, text is {poll_id}")
             try:
                 enum=read_gsheet(key, "ENUM_LIST")
@@ -366,6 +366,7 @@ def webhook():
                 Namez=list(enum_df['NAME'])
                 dict_=dict(zip(Namez, chat_ids))
                 # chat_id_alredy=dict_[Namez[option]]
+                print(Namez)
                 if dict_[Namez[option]]!="":
                     send_message(user_id, "dfdf")
                 else:

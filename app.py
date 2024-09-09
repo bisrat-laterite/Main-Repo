@@ -369,6 +369,8 @@ def webhook():
                 print(Namez)
                 print(dict_)
                 print(option)
+                print(Namez[option])
+                print(dict_[Namez[option]])
                 if dict_[Namez[option]]!="":
                     send_message(user_id, "dfdf")
                 else:

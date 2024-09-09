@@ -107,7 +107,7 @@ def send_message(chat_id, text):
 
 def send_inline_keyboard(chat_id, options, text):
     """Send an inline keyboard with the matching options."""
-    keyboard = [[{"text": option, "callback_data": option.index}] for option in options]
+    keyboard = [[{"text": option, "callback_data": options.index(option)}] for option in options]
 
     reply_markup = {
         "inline_keyboard": keyboard

@@ -363,7 +363,7 @@ def webhook():
                 enum=read_gsheet(key, "ENUM_LIST")
                 enum_df=pd.DataFrame(enum.get_all_records())
                 chat_ids=list(enum_df['CHAT_ID'])
-                Namez=list(enum_df['NAME'])
+                Namez=list(enum_df['NAME'].astype(str))
                 dict_=dict(zip(Namez, chat_ids))
                 # chat_id_alredy=dict_[Namez[option]]
                 print(Namez)
@@ -374,7 +374,8 @@ def webhook():
                 if dict_[name]!='':
                     send_message(user_id, "dfdf")
                 else:
-                    enum.update_cell(option+2, 3, str(user_id))
+                    enum2=read_gsheet(key, "ENUM_LIST")
+                    enum2.update_cell(option+2, 3, str(user_id))
             except:
                 send_message(user_id, f"Some error please contact bisrat!")
             ### updating the list based on the 

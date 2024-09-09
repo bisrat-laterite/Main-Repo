@@ -337,11 +337,7 @@ def webhook():
         user_name=poll_answer['message']['chat'].get('username', '')
         print(user_id, first_name, user_name)
         # # continue
-        
-        # ## retrieve chat id and what not
-        # # user_id=handle_poll_result(poll_answer)[0]
-        # # option=handle_poll_result(poll_answer)[1]
-        # # poll_id=handle_poll_result(poll_answer)[2]
+
         option=poll_answer['data']
         # user_id=poll_answer['message']['chat_id']
         poll_id=poll_answer['message']['text']
@@ -372,11 +368,11 @@ def webhook():
                 name=Namez[int(option)]
                 print(dict_[name], "kdfjdkf")
                 if dict_[name]!='':
-                    send_message(user_id, "dfdf")
+                    send_message(user_id, "You have already registered.")
                 else:
                     send_message(user_id, "need to edit but not happening")
-                    enum2=read_gsheet(key, "ENUM_LIST")
-                    enum2.update_cell(option+2, 3, str(user_id))
+                    # enum2=read_gsheet(key, "ENUM_LIST")
+                    enum.update_cell(int(option)+2, 3, str(user_id))
             except:
                 send_message(user_id, f"Some error please contact bisrat!")
             ### updating the list based on the 

@@ -328,16 +328,18 @@ def webhook():
                 send_message(chat_id, "Only respond to data quality and translation requests.")
 
     elif poll_answer!="":
-        ## retrieve chat id and what not
-        # user_id=handle_poll_result(poll_answer)[0]
-        # option=handle_poll_result(poll_answer)[1]
-        # poll_id=handle_poll_result(poll_answer)[2]
-        option=poll_answer['data']
-        user_id=poll_answer['message']['chat_id']
-        poll_id=poll_answer['message']['text']
+        print(poll_answer.keys())
+        # # continue
+        # ## retrieve chat id and what not
+        # # user_id=handle_poll_result(poll_answer)[0]
+        # # option=handle_poll_result(poll_answer)[1]
+        # # poll_id=handle_poll_result(poll_answer)[2]
+        # option=poll_answer['data']
+        # user_id=poll_answer['message']['chat_id']
+        # poll_id=poll_answer['message']['text']
         # text=poll_answer[]
         # callback_query.message.text
-        send_message(user_id, "ok")
+        # send_message(user_id, "ok")
         # pattern = r'\[([^\[\]]*)\]'
         # match = re.search(pattern, poll_id)
         # if match:

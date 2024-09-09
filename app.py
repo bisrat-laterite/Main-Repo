@@ -105,11 +105,21 @@ def send_message(chat_id, text):
     payload = {'chat_id': chat_id, 'text': text, 'parse_mode':'HTML'}
     requests.post(url, json=payload)
 
-def send_message_options(chat_id, text,keyboard):
-    """Send a message to a user of options to select from"""
-    url = TELEGRAM_API_URL + 'sendMessage'
-    payload = {'chat_id': chat_id, 'text': text,'reply_markup': keyboard,'parse_mode':'HTML'}
-    requests.post(url, json=payload)
+def send_inline_keyboard(chat_id, options):
+    """Send an inline keyboard with the matching options."""
+    keyboard = [[{"text": option, "callback_data": option}] for option in options]
+
+    reply_markup = {
+        "inline_keyboard": keyboard
+    }
+
+    url = TELEGRAM_API_URL + "sendMessage"
+    data = {
+        "chat_id": chat_id,
+        "text": "Here are the matching options:",
+        "reply_markup": reply_markup
+    }
+    requests.post(url, json=data)
 
 ##function to send the message of the data quality questions 
 def send_message_main(chat_id,text):
@@ -258,17 +268,18 @@ def webhook():
                                 chats=list(content['CHAT_ID'])
                                 if chat_id not in chats:
                                     text="Please select your name from the list."
+                                    send_inline_keyboard(chat_id, Names_)
                                     # send_message_options(chat_id, text,keyboard)
-                                    response=sendpoll(chat_id, Names_,text)
-                                    if response.status_code == 200:
-                                            # Parse the response JSON
-                                            poll_info = response.json()
-                                            # Extract the poll_id
-                                            poll_id = poll_info['result']['poll']['id']
-                                            gs=read_gsheet(main_sheet_key, "Polling")
-                                            value=ast.literal_eval(gs.cell(1, 1).value)
-                                            value[poll_id]=args
-                                            gs.update_cell(1, 1, str(value))
+                                    # response=sendpoll(chat_id, Names_,text)
+                                    # if response.status_code == 200:
+                                    #         # Parse the response JSON
+                                    #         poll_info = response.json()
+                                    #         # Extract the poll_id
+                                    #         poll_id = poll_info['result']['poll']['id']
+                                    #         gs=read_gsheet(main_sheet_key, "Polling")
+                                    #         value=ast.literal_eval(gs.cell(1, 1).value)
+                                    #         value[poll_id]=args
+                                    #         gs.update_cell(1, 1, str(value))
                                 else:
                                     pairs_ = dict(zip(chats, Names_))
                                     send_message(chat_id, f"You have already registered as <b>{pairs_[chat_id]}</b>. Please let {manager} and/or Bisrat know if you are not <b>{pairs_[chat_id]}</b>!")

@@ -105,7 +105,7 @@ def send_message(chat_id, text):
     payload = {'chat_id': chat_id, 'text': text, 'parse_mode':'HTML'}
     requests.post(url, json=payload)
 
-def send_inline_keyboard(chat_id, options):
+def send_inline_keyboard(chat_id, options, text):
     """Send an inline keyboard with the matching options."""
     keyboard = [[{"text": option, "callback_data": option}] for option in options]
 
@@ -116,8 +116,8 @@ def send_inline_keyboard(chat_id, options):
     url = TELEGRAM_API_URL + "sendMessage"
     data = {
         "chat_id": chat_id,
-        "text": "Here are the matching options:",
-        "reply_markup": reply_markup
+        "reply_markup": reply_markup,
+        "text":text
     }
     requests.post(url, json=data)
 
@@ -268,7 +268,7 @@ def webhook():
                                 chats=list(content['CHAT_ID'])
                                 if chat_id not in chats:
                                     text="Please select your name from the list."
-                                    send_inline_keyboard(chat_id, Names_)
+                                    send_inline_keyboard(chat_id, Names_, text)
                                     # send_message_options(chat_id, text,keyboard)
                                     # response=sendpoll(chat_id, Names_,text)
                                     # if response.status_code == 200:

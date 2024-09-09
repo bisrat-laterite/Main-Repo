@@ -337,14 +337,14 @@ def webhook():
         poll_id=poll_answer['message']['text']
         # text=poll_answer[]
         # callback_query.message.text
-        
-        pattern = r'\[([^\[\]]*)\]'
-        match = re.search(pattern, poll_id)
-        if match:
-            project_id=match.group(1)
-            send_message(chat_id, f"thanks, project is {project_id}")
-        else:
-            send_message(chat_id,f"thanks, no project id found" )
+        send_message(user_id, "ok")
+        # pattern = r'\[([^\[\]]*)\]'
+        # match = re.search(pattern, poll_id)
+        # if match:
+        #     project_id=match.group(1)
+        #     send_message(user_id, f"thanks, project is {project_id}")
+        # else:
+        #     send_message(user_id,f"thanks, no project id found" )
 
             ### reading the gsheet containing information about polling
             # polling_=read_gsheet(main_sheet_key, "Polling").cell(1, 1).value

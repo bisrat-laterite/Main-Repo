@@ -330,6 +330,7 @@ def webhook():
     elif poll_answer!="":
         print(poll_answer.keys())
         print(poll_answer['message'].keys())
+        print(poll_answer['message']['chat'].keys())
         # # continue
         # ## retrieve chat id and what not
         # # user_id=handle_poll_result(poll_answer)[0]

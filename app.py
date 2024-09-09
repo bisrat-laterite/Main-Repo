@@ -366,7 +366,7 @@ def webhook():
                 Namez=list(enum_df['NAME'])
                 dict_=dict(zip(Namez, chat_ids))
                 # chat_id_alredy=dict_[Namez[option]]
-                if dict_[Namez[option]]!=None:
+                if dict_[Namez[option]]!="":
                     send_message(user_id, "dfdf")
                 else:
                     enum.update_cell(option+2, 3, str(user_id))

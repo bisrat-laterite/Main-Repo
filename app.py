@@ -374,6 +374,7 @@ def webhook():
                 if dict_[name]!='':
                     send_message(user_id, "dfdf")
                 else:
+                    send_message(user_id, "need to edit but not happening")
                     enum2=read_gsheet(key, "ENUM_LIST")
                     enum2.update_cell(option+2, 3, str(user_id))
             except:

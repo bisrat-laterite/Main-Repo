@@ -107,7 +107,7 @@ def send_message(chat_id, text):
 
 def send_inline_keyboard(chat_id, options, text):
     """Send an inline keyboard with the matching options."""
-    keyboard = [[{"text": option, "callback_data": option}] for option in options]
+    keyboard = [[{"text": option, "callback_data": option.index}] for option in options]
 
     reply_markup = {
         "inline_keyboard": keyboard
@@ -138,7 +138,8 @@ def send_message_main(chat_id,text):
 def webhook():
     """Handle incoming updates from Telegram."""
     update = request.json
-    poll_answer = update.get('poll_answer', '')
+    # update['callback_query']
+    poll_answer = update.get('callback_query', '')
         ### handling requests
     if 'message' in update:
         chat_id = update['message']['chat']['id']

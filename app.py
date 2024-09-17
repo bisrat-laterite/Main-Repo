@@ -452,11 +452,13 @@ def webhook():
             print(key)
             try:
                 daily_report=pd.DataFrame(read_gsheet(key, "Daily_Report").get_all_records())
-                daily_report=daily_report[daily_report['CHAT_ID']==user_id]
+                # daily_report=daily_report[daily_report['CHAT_ID']==user_id]
                 send_message(user_id, "works till this point.")
                 dates=list(set(list(daily_report['today'])))
+                #ok dkjdfj
+                send_message(user_id, "works till this point."+str(dates[option]))
                 hhids=list(daily_report[daily_report['today']==dates[option]]['hhid'])
-                ids="\n".joint(hhids)
+                ids="\n".join(hhids)
                 send_message(user_id,f"you have completed these households /n {ids}")
             except:
                 send_message(user_id, f"Some error please contact bisrat!")

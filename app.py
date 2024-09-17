@@ -366,11 +366,11 @@ def webhook():
                 print(dict_)
                 print(option)
                 name=Namez[int(option)]
-                print(dict_[name], "kdfjdkf")
+                # print(dict_[name], "kdfjdkf")
                 if dict_[name]!='':
                     send_message(user_id, "You have already registered.")
                 else:
-                    # send_message(user_id, "need to edit but not happening")
+                    send_message(user_id, f"You are registering as {name} if this is not correct contact {manager} and/or Bisrat")
                     # enum2=read_gsheet(key, "ENUM_LIST")
                     enum.update_cell(int(option)+2, 3, str(user_id))
                     enum.update_cell(int(option)+2, 4, str(user_name))

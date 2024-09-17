@@ -245,7 +245,7 @@ def webhook():
                             send_message(chat_id, f"The project id you specified({args}) is wrong. Please try again with the right project id.")
                     else:
                         send_message(chat_id, f"The command /tr takes one argument(only one) eg. /tr wb_tst_1, Please try again with the correct format!")
-                ### translation sheet
+                ### registration sheet
                 elif command == '/rg':
                     if len(text.split(" "))==2:
                         args=text.split(" ")[1]
@@ -291,6 +291,50 @@ def webhook():
                             send_message(chat_id, f"The project id you specified({args}) is wrong. Please try again with the right project id.")
                     else:
                         send_message(chat_id, f"The command /rg takes one argument(only one) eg. /rg wb_tst_1, Please try again with the correct format!")
+                ### registration sheet
+                elif command == '/dr':
+                    if len(text.split(" "))==2:
+                        args=text.split(" ")[1]
+                        main=read_gsheet(main_sheet_key, main_sheet_name)
+                        main_content=pd.DataFrame(main.get_all_records())
+                        ### project key
+                        ### Checking 
+                        if args in list(main_content['project_id']):
+                            key=list(main_content[main_content['project_id']==args]['key'])[0]
+                            ### project manager
+                            manager=list(main_content[main_content['project_id']==args]['manager'])[0]
+                            ### if key not found send an error message
+                            # project_key=project_link.replace('//', '/').split('/')[4]
+                            # send_message(chat_id, key)
+                            try:
+                                a=read_gsheet(key, "Daily_Report")
+                                content=pd.DataFrame(a.get_all_records())
+                                dates=list(set(list(content['today'])))
+                                result = ", ".join(dates)
+                                send_message(chat_id, result)
+                                # if chat_id not in chats:
+                                #     text=f"Please select your name from the list [{args}]."
+                                #     send_inline_keyboard(chat_id, Names_, text)
+                                #     # send_message_options(chat_id, text,keyboard)
+                                #     # response=sendpoll(chat_id, Names_,text)
+                                #     # if response.status_code == 200:
+                                #     #         # Parse the response JSON
+                                #     #         poll_info = response.json()
+                                #     #         # Extract the poll_id
+                                #     #         poll_id = poll_info['result']['poll']['id']
+                                #     #         gs=read_gsheet(main_sheet_key, "Polling")
+                                #     #         value=ast.literal_eval(gs.cell(1, 1).value)
+                                #     #         value[poll_id]=args
+                                #     #         gs.update_cell(1, 1, str(value))
+                                # else:
+                                #     pairs_ = dict(zip(chats, Names_))
+                                #     send_message(chat_id, f"You have already registered as <b>{pairs_[chat_id]}</b>. Please let {manager} and/or Bisrat know if you are not <b>{pairs_[chat_id]}</b>!")
+                            except:
+                                send_message(chat_id, f"Some error let the project manager ({manager}/Bisrat) know")
+                        else:
+                            send_message(chat_id, f"The project id you specified({args}) is wrong. Please try again with the right project id.")
+                    else:
+                        send_message(chat_id, f"The command /dr takes one argument(only one) eg. /dr wb_tst_1, Please try again with the correct format!")
         if 'reply_to_message' in update['message']:   
         # handling responses
             pre_message_inf=update['message']['reply_to_message']

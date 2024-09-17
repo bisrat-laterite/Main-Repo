@@ -455,7 +455,7 @@ def webhook():
                 daily_report=daily_report[daily_report['CHAT_ID']==user_id]
                 send_message(user_id, "works till this point.")
                 dates=list(set(list(daily_report['today'])))
-                hhids=list(daily_report[daily_report['today'].isin(dates[option])]['hhid'])
+                hhids=list(daily_report[daily_report['today']==dates[option]]['hhid'])
                 ids="\n".joint(hhids)
                 send_message(user_id,f"you have completed these households /n {ids}")
             except:

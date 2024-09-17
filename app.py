@@ -442,7 +442,7 @@ def webhook():
             ### updating the list based on the 
             # send_message(user_id, f"you selected {option} for poll id {poll_id}")
         elif match2:
-            project_id=match.group(1)
+            project_id=match2.group(1)
             # send_message(user_id, f"thanks, project is {project_id}")
         #     ### reading the main sheet
             main=read_gsheet(main_sheet_key, main_sheet_name)

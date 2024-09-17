@@ -465,7 +465,7 @@ def webhook():
                 print(hhids.head())
                 print(list(hhids))
 
-                ids="\n".join(list(hhids))
+                ids="\n".join([str(x) for x in hhids])
                 print(ids)
                 send_message(user_id,f"you have completed these households /n {ids}")
             except:

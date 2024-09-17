@@ -454,8 +454,8 @@ def webhook():
                 daily_report=pd.DataFrame(read_gsheet(key, "Daily_Report").get_all_records())
                 daily_report=daily_report[daily_report['CHAT_ID']==user_id]
                 send_message(user_id, "works till this point.")
-                dates=daily_report['today']
-                print(dates.head(5))
+                dates=set(list(daily_report['today']))
+                print(dates)
                 # dates=list(set(dates))
                 #ok dkjdfj
                 send_message(user_id, "works till this point."+str(dates[option]))

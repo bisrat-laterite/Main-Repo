@@ -366,7 +366,7 @@ def webhook():
                 print(dict_)
                 print(option)
                 name=Namez[int(option)]
-                # print(dict_[name], "kdfjdkf")
+                print(dict_[name], "check")
                 if dict_[name]!='':
                     send_message(user_id, "You have already registered.")
                 else:

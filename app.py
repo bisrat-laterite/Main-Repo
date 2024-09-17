@@ -373,7 +373,7 @@ def webhook():
                     # send_message(user_id, "need to edit but not happening")
                     # enum2=read_gsheet(key, "ENUM_LIST")
                     enum.update_cell(int(option)+2, 3, str(user_id))
-                    enum.update_cell(int(option)+2, 3, str(user_name))
+                    enum.update_cell(int(option)+2, 4, str(user_name))
             except:
                 send_message(user_id, f"Some error please contact bisrat!")
             ### updating the list based on the 

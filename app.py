@@ -399,6 +399,9 @@ def webhook():
         # send_message(user_id, "ok")
         pattern = r'\[([^\[\]]*)\]'
         match = re.search(pattern, poll_id)
+
+        pattern2= r'\|([^\[\]]*)\|'
+        match2= re.search(pattern2, poll_id)
         if match:
             project_id=match.group(1)
             # send_message(user_id, f"thanks, project is {project_id}")
@@ -438,6 +441,24 @@ def webhook():
                 send_message(user_id, f"Some error please contact bisrat!")
             ### updating the list based on the 
             # send_message(user_id, f"you selected {option} for poll id {poll_id}")
+        elif match2:
+            project_id=match.group(1)
+            # send_message(user_id, f"thanks, project is {project_id}")
+        #     ### reading the main sheet
+            main=read_gsheet(main_sheet_key, main_sheet_name)
+            main_content=pd.DataFrame(main.get_all_records())
+            key=list(main_content[main_content['project_id']==project_id]['key'])[0]
+            manager=list(main_content[main_content['project_id']==project_id]['manager'])[0]
+            print(key)
+            try:
+                daily_report=pd.DataFrame(read_gsheet(key, "Daily_Report").get_all_records())
+                daily_report=daily_report[daily_report['CHAT_ID']==user_id]
+                dates=list(set(list(daily_report['today'])))
+                hhids=list(daily_report[daily_report['today'].isin(dates[option])]['hhid'])
+                send_message(user_id,f"you have completed these households {"\n".join(hhids)}")
+            except:
+                send_message(user_id, f"Some error please contact bisrat!")
+
         else:
             send_message(user_id, "some error project id not found")
 

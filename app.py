@@ -360,11 +360,11 @@ def webhook():
                 enum=read_gsheet(key, "ENUM_LIST")
                 enum_df=pd.DataFrame(enum.get_all_records())
                 chat_ids=list(enum_df['CHAT_ID'])
-                first_name=list(enum_df['FIRST_NAME'])
+                first_names=list(enum_df['FIRST_NAME'])
                 Usernames=list(enum_df['USER_NAME'])
                 Namez=list(enum_df['NAME'].astype(str))
                 dict_=dict(zip(Namez, chat_ids))
-                dict2_=dict(zip(Namez, first_name))
+                dict2_=dict(zip(Namez, first_names))
                 dict3_=dict(zip(Namez, Usernames))
                 # chat_id_alredy=dict_[Namez[option]]
                 print(Namez)

@@ -463,7 +463,10 @@ def webhook():
                 # send_message(user_id, "works till this point."+str(dates[option]))
                 hhids=daily_report[daily_report['today']==dates[int(option)]]['hhid']
                 print(hhids.head())
+                print(list(hhids))
+
                 ids="\n".join(list(hhids))
+                print(ids)
                 send_message(user_id,f"you have completed these households /n {ids}")
             except:
                 send_message(user_id, f"Some error please contact bisrat!")

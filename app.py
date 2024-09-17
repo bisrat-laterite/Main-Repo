@@ -310,10 +310,14 @@ def webhook():
                                 a=read_gsheet(key, "Daily_Report")
                                 content=pd.DataFrame(a.get_all_records())
                                 dates=list(set(list(content['today'])))
-                                result = ", ".join(dates)
-                                send_message(chat_id, result)
-                                text=f"Please select your name from the list |{args}|."
-                                send_inline_keyboard(chat_id, dates, text)
+                                chat_ids=list(set(list(content['CHAT_ID'])))
+                                if chat_id in chat_ids:
+                                    result = ", ".join(dates)
+                                    send_message(chat_id, result)
+                                    text=f"Please select the date for which you would like daily report from the list |{args}|."
+                                    send_inline_keyboard(chat_id, dates, text)
+                                else:
+                                    send_message(chat_id, "You are either not part of this project or there are no completed surveys under you name.")
                                 # if chat_id not in chats:
                                 #     text=f"Please select your name from the list [{args}]."
                                 #     send_inline_keyboard(chat_id, Names_, text)

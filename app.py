@@ -461,7 +461,8 @@ def webhook():
                 # dates=list(set(dates))
                 #ok dkjdfj
                 # send_message(user_id, "works till this point."+str(dates[option]))
-                hhids=daily_report[daily_report['today']==dates[int(option)]]['hhid']
+                hhids=daily_report[daily_report['today']==dates[int(option)]]['hhid', 'CHAT_ID']
+                hhids=hhids[hhids['CHAT_ID']==user_id]['hhid']
                 print(hhids.head())
                 print(list(hhids))
 

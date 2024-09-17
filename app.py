@@ -359,8 +359,12 @@ def webhook():
                 enum=read_gsheet(key, "ENUM_LIST")
                 enum_df=pd.DataFrame(enum.get_all_records())
                 chat_ids=list(enum_df['CHAT_ID'])
+                first_name=list(enum_df['FIRST_NAME'])
+                Usernames=list(enum_df['USER_NAME'])
                 Namez=list(enum_df['NAME'].astype(str))
                 dict_=dict(zip(Namez, chat_ids))
+                dict2_=dict(zip(Namez, first_name))
+                dict3_=dict(zip(Namez, Usernames))
                 # chat_id_alredy=dict_[Namez[option]]
                 print(Namez)
                 print(dict_)
@@ -368,7 +372,7 @@ def webhook():
                 name=Namez[int(option)]
                 print(dict_[name], "check")
                 if dict_[name]!='':
-                    send_message(user_id, "You have already registered.")
+                    send_message(user_id, f"Someone[{dict2_[name], dict3_[name]}] already has already registered as {name}.")
                 else:
                     #send_message(user_id, f"You are registering as {name} if this is not correct contact {manager} and/or Bisrat")
                     enum2=read_gsheet(key, "ENUM_LIST")

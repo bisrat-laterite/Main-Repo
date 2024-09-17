@@ -457,6 +457,7 @@ def webhook():
                 dates=list(set(list(daily_report['today'])))
                 print(dates)
                 print(option)
+                print(dates[int(option)])
                 # dates=list(set(dates))
                 #ok dkjdfj
                 send_message(user_id, "works till this point."+str(dates[option]))

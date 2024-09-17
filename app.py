@@ -312,6 +312,8 @@ def webhook():
                                 dates=list(set(list(content['today'])))
                                 result = ", ".join(dates)
                                 send_message(chat_id, result)
+                                text=f"Please select your name from the list |{args}|."
+                                send_inline_keyboard(chat_id, dates, text)
                                 # if chat_id not in chats:
                                 #     text=f"Please select your name from the list [{args}]."
                                 #     send_inline_keyboard(chat_id, Names_, text)

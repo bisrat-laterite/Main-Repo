@@ -371,8 +371,8 @@ def webhook():
                     send_message(user_id, "You have already registered.")
                 else:
                     send_message(user_id, f"You are registering as {name} if this is not correct contact {manager} and/or Bisrat")
-                    # enum2=read_gsheet(key, "ENUM_LIST")
-                    enum.update_cell(int(option)+2, 3, str(user_id))
+                    enum2=read_gsheet(key, "ENUM_LIST")
+                    enum2.update_cell(int(option)+2, 3, str(user_id))
                     # enum.update_cell(int(option)+2, 4, str(first_name))
             except:
                 send_message(user_id, f"Some error please contact bisrat!")

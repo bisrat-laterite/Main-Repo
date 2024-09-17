@@ -463,12 +463,15 @@ def webhook():
                 # send_message(user_id, "works till this point."+str(dates[option]))
                 hhids=daily_report[daily_report['today']==dates[int(option)]][['hhid', 'CHAT_ID']]
                 hhids=hhids[hhids['CHAT_ID']==user_id]['hhid']
-                print(hhids.head())
-                print(list(hhids))
+                if hhids.empty:
+                    send_message(user_id, f"You have no surveys completed on {str(dates[int(option)])}")
+                else:
+                    print(hhids.head())
+                    print(list(hhids))
 
-                ids="\n".join([str(x) for x in hhids])
-                # print(ids)
-                send_message(user_id,f"you have completed these households on {str(dates[int(option)])} \n {ids}")
+                    ids="\n".join([str(x) for x in hhids])
+                    # print(ids)
+                    send_message(user_id,f"you have completed these households on {str(dates[int(option)])} \n {ids}")
             except:
                 send_message(user_id, f"Some error please contact bisrat!")
 

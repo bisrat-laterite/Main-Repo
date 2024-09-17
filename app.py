@@ -374,6 +374,8 @@ def webhook():
                     enum2=read_gsheet(key, "ENUM_LIST")
                     enum2.update_cell(int(option)+2, 3, str(user_id))
                     enum2.update_cell(int(option)+2, 4, str(first_name))
+                    enum2.update_cell(int(option)+2, 5, str(user_name))
+
             except:
                 send_message(user_id, f"Some error please contact bisrat!")
             ### updating the list based on the 

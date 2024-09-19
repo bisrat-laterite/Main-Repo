@@ -501,7 +501,7 @@ def webhook():
         status=chat_member['new_chat_member']['status']
         chat_id=chat_member['from']['id']
         first_name=chat_member['from']['first_name']
-        user_name=chat_member['from'].get('username', ''s)
+        user_name=chat_member['from'].get('username', '')
         # my_chat_member.from.first_name	my_chat_member.from.username
 
         if status=='kicked':

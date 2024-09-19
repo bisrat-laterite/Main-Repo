@@ -476,7 +476,8 @@ def webhook():
                 #ok dkjdfj
                 # send_message(user_id, "works till this point."+str(dates[option]))
                 hhids=daily_report[daily_report['today']==dates[int(option)]][['hhid', 'CHAT_ID']]
-                hhids=hhids[hhids['CHAT_ID']==user_id]['hhid']
+                hhids=hhids[hhids['CHAT_ID']==user_id]
+                hhids=hhids[hhids['consent']==1]['hhid']
                 if hhids.empty:
                     send_message(user_id, f"You have no surveys completed on {str(dates[int(option)])}")
                 else:

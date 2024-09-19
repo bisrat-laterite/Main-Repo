@@ -152,10 +152,10 @@ def webhook():
                 # command, *args = text.split()
                 command=text.split(" ")[0]
                 command, *args = text.split(" ")
-                if command == '/start':
-                    send_message(chat_id, "Welcome! Use /help to see available commands.")
-                ###  using the /dq command
-                elif command == '/dq':
+                # if command == '/start':
+                #     send_message(chat_id, "Welcome! Use /help to see available commands.")
+                # ###  using the /dq command
+                if command == '/dq':
                     if len(text.split(" "))==2:
                         args=text.split(" ")[1]
                         main=read_gsheet(main_sheet_key, main_sheet_name)
@@ -228,7 +228,9 @@ def webhook():
                             enum_list_pre=read_gsheet(key, "ENUM_LIST")
                             enum_list=list(pd.DataFrame(enum_list_pre.get_all_records())['CHAT_ID'])
                             if chat_id not in enum_list:
-                                send_message(chat_id, f"You have not yet registered to the {args} project. Please do so using [/rg {args}] and following the steps accordingly.")
+                                text="<a href='https://t.me/laterite_dataqualitybot'>Data Quality Bot</a>" \
+                                + "\n" +f"You have not yet registered to the {args} project. Please do so using [/rg {args}] and following the steps accordingly."
+                                send_message(chat_id, text)
                             else:
                                 try:
                                     a=read_gsheet(key, "Data Quality - Translations")
@@ -238,7 +240,9 @@ def webhook():
                                     filtered=filtered[filtered['TASK_STATUS'].isin(["Pending", "Clarification Needed"])]
                                     filtered=filtered[filtered['Field_Response']==""]
                                     if filtered.shape[0]==0:
-                                        send_message(chat_id, "Thank you for all your responses. You have no translations remaining under your name")
+                                        text="<a href='https://t.me/laterite_dataqualitybot'>Data Quality Bot</a>" \
+                                        + "\n" +"Thank you for all your responses. You have no translations remaining under your name"
+                                        send_message(chat_id, text)
                                     for index, row in filtered.iterrows():
                                         text=(str(dict(row)))
                                         text =  "<a href='https://www.laterite.com/'>Data Quality Bot</a>" \
@@ -251,11 +255,17 @@ def webhook():
                                         send_message_main(chat_id, text)
                                     # send_message(chat_id, "success")
                                 except:
-                                    send_message(chat_id, f"Some error let the project manager ({manager}/Bisrat) know")
+                                    text="<a href='https://t.me/laterite_dataqualitybot'>Data Quality Bot</a>" \
+                                    + "\n" + f"Some error let the project manager ({manager}/Bisrat) know"
+                                    send_message(chat_id, text)
                         else:
-                            send_message(chat_id, f"The project id you specified({args}) is wrong. Please try again with the right project id.")
+                            text="<a href='https://t.me/laterite_dataqualitybot'>Data Quality Bot</a>" \
+                            + "\n" +  f"The project id you specified({args}) is wrong. Please try again with the right project id."                           
+                            send_message(chat_id, text)
                     else:
-                        send_message(chat_id, f"The command /tr takes one argument(only one) eg. /tr wb_tst_1, Please try again with the correct format!")
+                        text="<a href='https://t.me/laterite_dataqualitybot'>Data Quality Bot</a>" \
+                        + "\n" +  f"The command /tr takes one argument(only one) eg. /tr wb_tst_1, Please try again with the correct format!"
+                        send_message(chat_id, text)
                 ### registration sheet
                 elif command == '/rg':
                     if len(text.split(" "))==2:

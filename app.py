@@ -146,6 +146,9 @@ def webhook():
     update = request.json
     # update['callback_query']
     poll_answer = update.get('callback_query', '')
+    chat_member= update.get('my_chat_member', '')
+    # .new_chat_member.status
+
         ### handling requests
     if 'message' in update:
         chat_id = update['message']['chat']['id']
@@ -450,7 +453,7 @@ def webhook():
                     enum2.update_cell(int(option)+2, 3, str(user_id))
                     enum2.update_cell(int(option)+2, 4, str(first_name))
                     enum2.update_cell(int(option)+2, 5, str(user_name))
-                    send_message(user_id, f"You have registered as {name}! Please let the {manager}/Bisrat know if the selection is wrong.")
+                    send_message(user_id, f"You have registered as {name}! Please let {manager}/Bisrat know if the selection is wrong.")
 
             except:
                 send_message(user_id, f"Some error please contact bisrat!")
@@ -494,6 +497,18 @@ def webhook():
 
         else:
             send_message(user_id, "some error project id not found")
+    elif chat_member!="":
+        status=chat_member['new_chat_member']['status']
+        chat_id=chat_member['from']['id']
+        first_name=chat_member['from']['first_name']
+        user_name=chat_member['from'].get('username', ''s)
+        # my_chat_member.from.first_name	my_chat_member.from.username
+
+        if status=='kicked':
+            send_message(585511605, f"this person left {chat_id} Name:[{first_name}], Username:[{user_name}]")
+
+# member
+
 
     return 'OK', 200
 

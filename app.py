@@ -270,7 +270,7 @@ def webhook():
                                 Names_=list(content['NAME'])
                                 chats=list(content['CHAT_ID'])
                                 if chat_id not in chats:
-                                    text="<a href='https://t.me/bisget_bot'>Data Quality Bot</a>" \
+                                    text="<a href='https://t.me/laterite_dataqualitybot'>Data Quality Bot</a>" \
                                     +"\n" + f"Please select your name from the list [{args}]."
                                     send_inline_keyboard(chat_id, Names_, text)
                                     # send_message_options(chat_id, text,keyboard)
@@ -314,9 +314,7 @@ def webhook():
                                 dates=list(set(list(content['today'])))
                                 chat_ids=list(set(list(content['CHAT_ID'])))
                                 if chat_id in chat_ids:
-                                    result = ", ".join(dates)
-                                    send_message_main(chat_id, result)
-                                    text="<a href='https://t.me/bisget_bot'>Data Quality Bot</a>" \
+                                    text="<a href='https://t.me/laterite_dataqualitybot'>Data Quality Bot</a>" \
                                     +"\n"+ f"Please select the date for which you would like daily report from the list |{args}|."
                                     send_inline_keyboard(chat_id, dates, text)
                                 else:

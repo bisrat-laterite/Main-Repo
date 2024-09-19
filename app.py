@@ -100,14 +100,18 @@ def handle_poll_result(poll_answer):
 
 
     
-def send_message(chat_id, text):
+def send_message(chat_id, text_):
     """Send a message to a user."""
     url = TELEGRAM_API_URL + 'sendMessage'
+    text =  "<a href='https://t.me/laterite_dataqualitybot'>Data Quality Bot</a>" \
+    + "\n" + text_
     payload = {'chat_id': chat_id, 'text': text, 'parse_mode':'HTML'}
     requests.post(url, json=payload)
 
-def send_inline_keyboard(chat_id, options, text):
+def send_inline_keyboard(chat_id, options, text_):
     """Send an inline keyboard with the matching options."""
+    text =  "<a href='https://t.me/laterite_dataqualitybot'>Data Quality Bot</a>" \
+    + "\n" + text_
     keyboard = [[{"text": option, "callback_data": options.index(option)}] for option in options]
 
     reply_markup = {
@@ -172,8 +176,7 @@ def webhook():
                             enum_list_pre=read_gsheet(key, "ENUM_LIST")
                             enum_list=list(pd.DataFrame(enum_list_pre.get_all_records())['CHAT_ID'])
                             if chat_id not in enum_list:
-                                text="<a href='https://t.me/laterite_dataqualitybot'>Data Quality Bot</a>" \
-                                + "\n" +f"You have not yet registered to the {args} project. Please do so using [/rg {args}] and following the steps accordingly."
+                                text=f"You have not yet registered to the {args} project. Please do so using [/rg {args}] and following the steps accordingly."
                                 send_message(chat_id, text)
                             else:
                                 try:
@@ -184,8 +187,7 @@ def webhook():
                                     filtered=filtered[filtered['Status'].isin(["Pending", "Clarification Needed"])]
                                     filtered=filtered[filtered['Enumerator Response']==""]
                                     if filtered.shape[0]==0:
-                                        text="<a href='https://t.me/laterite_dataqualitybot'>Data Quality Bot</a>" \
-                                        + "\n" +"Thank you for all your responses. You have no data quality items remaining under your name"
+                                        text="Thank you for all your responses. You have no data quality items remaining under your name"
                                         send_message(chat_id, text)
                                     for index, row in filtered.iterrows():
                                         text=(str(dict(row)))
@@ -199,16 +201,13 @@ def webhook():
                                         send_message_main(chat_id, text)
                                     # send_message(chat_id, "success")
                                 except:
-                                    text="<a href='https://t.me/laterite_dataqualitybot'>Data Quality Bot</a>" \
-                                    + "\n" + f"Some error let the project manager ({manager}/Bisrat) know"
+                                    text= f"Some error let the project manager ({manager}/Bisrat) know"
                                     send_message(chat_id, text)
                         else:
-                            text="<a href='https://t.me/laterite_dataqualitybot'>Data Quality Bot</a>" \
-                            + "\n" + f"The project id you specified({args}) is wrong. Please try again with the right project id."
+                            text=f"The project id you specified({args}) is wrong. Please try again with the right project id."
                             send_message(chat_id, text)
                     else:
-                        text="<a href='https://t.me/laterite_dataqualitybot'>Data Quality Bot</a>" \
-                        + "\n" + f"The command /dq takes one argument(only one) eg. /dq wb_tst_1, Please try again with the correct format!"                        
+                        text=f"The command /dq takes one argument(only one) eg. /dq wb_tst_1, Please try again with the correct format!"                        
                         send_message(chat_id, text)
                 ### translation sheet
                 elif command == '/tr':
@@ -228,8 +227,7 @@ def webhook():
                             enum_list_pre=read_gsheet(key, "ENUM_LIST")
                             enum_list=list(pd.DataFrame(enum_list_pre.get_all_records())['CHAT_ID'])
                             if chat_id not in enum_list:
-                                text="<a href='https://t.me/laterite_dataqualitybot'>Data Quality Bot</a>" \
-                                + "\n" +f"You have not yet registered to the {args} project. Please do so using [/rg {args}] and following the steps accordingly."
+                                text=f"You have not yet registered to the {args} project. Please do so using [/rg {args}] and following the steps accordingly."
                                 send_message(chat_id, text)
                             else:
                                 try:
@@ -240,8 +238,7 @@ def webhook():
                                     filtered=filtered[filtered['TASK_STATUS'].isin(["Pending", "Clarification Needed"])]
                                     filtered=filtered[filtered['Field_Response']==""]
                                     if filtered.shape[0]==0:
-                                        text="<a href='https://t.me/laterite_dataqualitybot'>Data Quality Bot</a>" \
-                                        + "\n" +"Thank you for all your responses. You have no translations remaining under your name"
+                                        text="Thank you for all your responses. You have no translations remaining under your name"
                                         send_message(chat_id, text)
                                     for index, row in filtered.iterrows():
                                         text=(str(dict(row)))
@@ -255,16 +252,13 @@ def webhook():
                                         send_message_main(chat_id, text)
                                     # send_message(chat_id, "success")
                                 except:
-                                    text="<a href='https://t.me/laterite_dataqualitybot'>Data Quality Bot</a>" \
-                                    + "\n" + f"Some error let the project manager ({manager}/Bisrat) know"
+                                    text=f"Some error let the project manager ({manager}/Bisrat) know"
                                     send_message(chat_id, text)
                         else:
-                            text="<a href='https://t.me/laterite_dataqualitybot'>Data Quality Bot</a>" \
-                            + "\n" +  f"The project id you specified({args}) is wrong. Please try again with the right project id."                           
+                            text=f"The project id you specified({args}) is wrong. Please try again with the right project id."                           
                             send_message(chat_id, text)
                     else:
-                        text="<a href='https://t.me/laterite_dataqualitybot'>Data Quality Bot</a>" \
-                        + "\n" +  f"The command /tr takes one argument(only one) eg. /tr wb_tst_1, Please try again with the correct format!"
+                        text=f"The command /tr takes one argument(only one) eg. /tr wb_tst_1, Please try again with the correct format!"
                         send_message(chat_id, text)
                 ### registration sheet
                 elif command == '/rg':
@@ -290,8 +284,7 @@ def webhook():
                                 Names_=list(content['NAME'])
                                 chats=list(content['CHAT_ID'])
                                 if chat_id not in chats:
-                                    text="<a href='https://t.me/laterite_dataqualitybot'>Data Quality Bot</a>" \
-                                    +"\n" + f"Please select your name from the list [{args}]."
+                                    text=f"Please select your name from the list [{args}]."
                                     send_inline_keyboard(chat_id, Names_, text)
                                     # send_message_options(chat_id, text,keyboard)
                                     # response=sendpoll(chat_id, Names_,text)
@@ -306,13 +299,17 @@ def webhook():
                                     #         gs.update_cell(1, 1, str(value))
                                 else:
                                     pairs_ = dict(zip(chats, Names_))
-                                    send_message(chat_id, f"You have already registered as <b>{pairs_[chat_id]}</b>. Please let {manager} and/or Bisrat know if you are not <b>{pairs_[chat_id]}</b>!")
+                                    text=f"You have already registered as <b>{pairs_[chat_id]}</b>. Please let {manager} and/or Bisrat know if you are not <b>{pairs_[chat_id]}</b>!"
+                                    send_message(chat_id, text)
                             except:
-                                send_message(chat_id, f"Some error let the project manager ({manager}/Bisrat) know")
+                                text=f"Some error let the project manager ({manager}/Bisrat) know"
+                                send_message(chat_id, text)
                         else:
-                            send_message(chat_id, f"The project id you specified({args}) is wrong. Please try again with the right project id.")
+                            text=f"The project id you specified({args}) is wrong. Please try again with the right project id."
+                            send_message(chat_id, text)
                     else:
-                        send_message(chat_id, f"The command /rg takes one argument(only one) eg. /rg wb_tst_1, Please try again with the correct format!")
+                        text=f"The command /rg takes one argument(only one) eg. /rg wb_tst_1, Please try again with the correct format!"
+                        send_message(chat_id, text)
                 ### registration sheet
                 elif command == '/dr':
                     if len(text.split(" "))==2:
@@ -334,8 +331,7 @@ def webhook():
                                 dates=list(set(list(content['today'])))
                                 chat_ids=list(set(list(content['CHAT_ID'])))
                                 if chat_id in chat_ids:
-                                    text="<a href='https://t.me/laterite_dataqualitybot'>Data Quality Bot</a>" \
-                                    +"\n"+ f"Please select the date for which you would like daily report from the list |{args}|."
+                                    text=f"Please select the date for which you would like daily report from the list |{args}|."
                                     send_inline_keyboard(chat_id, dates, text)
                                 else:
                                     send_message(chat_id, "You are either not part of this project or there are no completed surveys under you name.")

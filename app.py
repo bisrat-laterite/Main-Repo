@@ -450,6 +450,7 @@ def webhook():
                     enum2.update_cell(int(option)+2, 3, str(user_id))
                     enum2.update_cell(int(option)+2, 4, str(first_name))
                     enum2.update_cell(int(option)+2, 5, str(user_name))
+                    send_message(user_id, f"You have registered as {name}! Please let the {manager}/Bisrat know if the selection is wrong.")
 
             except:
                 send_message(user_id, f"Some error please contact bisrat!")

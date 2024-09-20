@@ -491,7 +491,7 @@ def webhook():
 
                     ids="\n".join([str(x) for x in hhids])
                     # print(ids)
-                    send_message(user_id,f"you have completed these households on {str(dates[int(option)])} \n {ids}")
+                    send_message(user_id,f"you have completed these households on {str(dates[int(option)])} \n{ids}")
             except:
                 send_message(user_id, f"Some error please contact bisrat!")
 
@@ -505,7 +505,9 @@ def webhook():
         # my_chat_member.from.first_name	my_chat_member.from.username
 
         if status=='kicked':
-            send_message(585511605, f"this person left {chat_id} Name:[{first_name}], Username:[{user_name}]")
+            send_message(585511605, f"This person left {chat_id} \nName:[{first_name}],\nUsername:[{user_name}]")
+        elif status=='member':
+            send_message(585511605, f"This person joined {chat_id} \nName:[{first_name}],\nUsername:[{user_name}]")
 
 # member
 

@@ -427,7 +427,7 @@ def webhook():
                     else:
                         send_message(chat_id, "Only respond to data quality and translation requests.")
 
-                    row_cell=pd.Dataframe(read_gsheet(key, name_sheet).get_all_records()).columns.get_loc('field_response')+1
+                    row_cell=pd.DataFrame(read_gsheet(key, name_sheet).get_all_records()).columns.get_loc('field_response')+1
                     ### reading the gsheet
                     gs=read_gsheet(key, name_sheet)
                     ### updating the sheet

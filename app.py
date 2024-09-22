@@ -510,7 +510,7 @@ def webhook():
             
             db=pd.DataFrame(read_gsheet(main_sheet_key, "Database").get_all_records())
             fil1=db['CHAT_ID']==chat_id
-            fil2=db['status']=="Ongoing"
+            fil2=db['STATUS']=="Ongoing"
             pr=list(db[fil1 & fil2]['PROJECT_ID'])
             if pr!=[]:
                 x="\n".join(pr)

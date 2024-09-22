@@ -188,7 +188,7 @@ def webhook():
                                     filtered=content[content['chat_id']==chat_id]
                                     ### send only pending/ clarification needed comments
                                     filtered=filtered[filtered['Status'].isin(["Pending", "Clarification Needed"])]
-                                    filtered=filtered[filtered['Enumerator Response']==""]
+                                    filtered=filtered[filtered['field_response']==""]
                                     if filtered.shape[0]==0:
                                         text="Thank you for all your responses. You have no data quality items remaining under your name"
                                         send_message(chat_id, text)
@@ -239,7 +239,7 @@ def webhook():
                                     filtered=content[content['enum_chat']==chat_id]
                                     ### send only pending/ clarification needed comments
                                     filtered=filtered[filtered['TASK_STATUS'].isin(["Pending", "Clarification Needed"])]
-                                    filtered=filtered[filtered['Field_Response']==""]
+                                    filtered=filtered[filtered['field_response']==""]
                                     if filtered.shape[0]==0:
                                         text="Thank you for all your responses. You have no translations remaining under your name"
                                         send_message(chat_id, text)
@@ -380,7 +380,7 @@ def webhook():
                         filtered=content[content['chat_id']==chat_id]
                         ### send only pending/ clarification needed comments
                         filtered=filtered[filtered['Status'].isin(["Pending", "Clarification Needed"])]
-                        filtered=filtered[filtered['Enumerator Response']==""]
+                        filtered=filtered[filtered['field_response']==""]
                         if filtered.shape[0]==0:
                             text="Thank you for all your responses. You have no data quality items remaining under your name"
                             send_message(chat_id, text)
@@ -419,13 +419,15 @@ def webhook():
                     ### identifying which sheet to edit
                     if pre_message['Task']=="Translation":
                         name_sheet="Data Quality - Translations"
-                        row_cell=12
+                        # row_cell=12
                     elif pre_message['Task']=="Data quality":
                         # pre_message['Task']=="Data quality"
                         name_sheet="Data Quality - General"
-                        row_cell=11
+                        # row_cell=11
                     else:
                         send_message(chat_id, "Only respond to data quality and translation requests.")
+
+                    row_cell=pd.Dataframe(read_gsheet(key, name_sheet).get_all_records()).columns.get_loc('field_response')+1
                     ### reading the gsheet
                     gs=read_gsheet(key, name_sheet)
                     ### updating the sheet

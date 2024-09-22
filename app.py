@@ -332,14 +332,13 @@ def webhook():
                     else:
                         send_message(chat_id, f"The command /dr takes one argument(only one) eg. /dr wb_tst_1, Please try again with the correct format!")
                 elif command=='/help':
-                    text="Thank you so much for using the Data Quality Bot!"
+                    text="Thank you so much for using the Data Quality Bot!" \
                     "\n"+"Use /dq project_id to request for data quality questions" \
                     "\n"+"Use /tr project_id to request translation items for FCs only" \
                     "\n"+"use /rg project_id to register to a new project you will be working on" \
                     "\n"+"use /dr project_id to request household ids/sample completed each day " \
                     "\n"+"<i>note that project_id is a placeholder for a project id </i> that you will be given at the start of a new project."
                     "\n"+ "<i> If you have any questions, do reach out to Bisrat <i>" 
-                    ## sending
                     send_message(chat_id, text)
 
             ### legacy

@@ -454,7 +454,9 @@ def webhook():
                     enum2.update_cell(int(option)+2, 4, str(first_name))
                     enum2.update_cell(int(option)+2, 5, str(user_name))
                     send_message(user_id, f"You have registered as {name}! Please let {manager}/Bisrat know if the selection is wrong.")
-
+                    ### appending to database for ease of use in legacy
+                    db=read_gsheet(main_sheet_key, "Database")
+                    db.append_row([name, user_id, first_name, user_name, project_id])
             except:
                 send_message(user_id, f"Some error please contact bisrat!")
             ### updating the list based on the 
@@ -505,9 +507,9 @@ def webhook():
         # my_chat_member.from.first_name	my_chat_member.from.username
 
         if status=='kicked':
-            send_message(585511605, f"This person left {chat_id} \nName:[{first_name}],\nUsername:[{user_name}]")
+            send_message(585511605, f"This person left {chat_id} \nName:{first_name}\nUsername:{user_name}")
         elif status=='member':
-            send_message(585511605, f"This person joined {chat_id} \nName:[{first_name}],\nUsername:[{user_name}]")
+            send_message(585511605, f"This person joined {chat_id} \nName:{first_name}\nUsername:{user_name}")
 
 # member
 

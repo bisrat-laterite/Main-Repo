@@ -507,7 +507,16 @@ def webhook():
         # my_chat_member.from.first_name	my_chat_member.from.username
 
         if status=='kicked':
-            send_message(585511605, f"This person left {chat_id} \nName:{first_name}\nUsername:{user_name}")
+            
+            db=pd.DataFrame(read_gsheet(main_sheet_key, "Database").get_all_records())
+            fil1=db['CHAT_ID']==user_id
+            fil2=db['status']=="Ongoing"
+            pr=list(db[fil1 & fil2]['PROJECT_ID'])
+            if pr!=[]:
+                x="\n".join(pr)
+                send_message(585511605, f"This person left {chat_id} \nName:{first_name}\nUsername:{user_name}\n was part of the ongoing project/s \n{x} ")
+            else:
+                send_message(585511605, f"This person left {chat_id} \nName:{first_name}\nUsername:{user_name}")
         elif status=='member':
             send_message(585511605, f"This person joined {chat_id} \nName:{first_name}\nUsername:{user_name}")
 

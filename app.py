@@ -338,7 +338,7 @@ def webhook():
                     "\n"+"use /rg project_id to register to a new project you will be working on" + \
                     "\n"+"use /dr project_id to request household ids/sample completed each day " + \
                     "\n"+"<i>note that project_id is a placeholder for a project id </i> that you will be given at the start of a new project." + \
-                    "\n"+ "<i> If you have any questions, do reach out to Bisrat <i>" 
+                    "\n"+ "<i> If you have any questions, do reach out to Bisrat </i>" 
                     send_message(chat_id, text)
 
             ### legacy

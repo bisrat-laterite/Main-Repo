@@ -361,6 +361,45 @@ def webhook():
                             send_message(chat_id, f"The project id you specified({args}) is wrong. Please try again with the right project id.")
                     else:
                         send_message(chat_id, f"The command /dr takes one argument(only one) eg. /dr wb_tst_1, Please try again with the correct format!")
+            ### legacy
+            elif text=='hello':
+                ### reading database
+                db=pd.DataFrame(read_gsheet(main_sheet_key, "Database").get_all_records())
+                fil1=db['CHAT_ID']==chat_id
+                fil2=db['STATUS']=="Ongoing"
+                project_idz=list(db[fil1 & fil2]['PROJECT_ID'])
+                main=pd.DataFrame(read_gsheet(main_sheet_key, main_sheet_name).get_all_records())
+                fil3=main['project_id'].isin(project_idz)
+                dict_pre=main[fil3][['key', 'project_id']]
+                dict_from_columns = dict_pre.set_index('key')['project_id'].to_dict()
+                keys=list(main[fil3]['key'])
+                for key in keys:
+                    try:
+                        a=read_gsheet(key, "Data Quality - General")
+                        content=pd.DataFrame(a.get_all_records())
+                        filtered=content[content['chat_id']==chat_id]
+                        ### send only pending/ clarification needed comments
+                        filtered=filtered[filtered['Status'].isin(["Pending", "Clarification Needed"])]
+                        filtered=filtered[filtered['Enumerator Response']==""]
+                        if filtered.shape[0]==0:
+                            text="Thank you for all your responses. You have no data quality items remaining under your name"
+                            send_message(chat_id, text)
+                        for index, row in filtered.iterrows():
+                            text=(str(dict(row)))
+                            text =  "<a href='https://www.laterite.com/'>Data Quality Bot</a>" \
+                            + "\n" + f"<b>Enumerator Name: </b>"+ row['Enumerator'] + \
+                                "\n" +   f"<b>HHID: </b>" + str(row['HHID'])  + \
+                                "\n" +   f"<b>Variable: </b>" + row['Variable'] \
+                                +  "\n" +   f"<b>Data Quality Question :</b>" + row['issue_description'] \
+                                + "\n" + f"<b>Task :</b> Data quality" \
+                            + "\n" +  f"<b>Project ID: </b> "+ dict_from_columns[key]
+                            send_message_main(chat_id, text)
+                        # send_message(chat_id, "success")
+                    except:
+                        text= f"Some error let the project manager/Bisrat know"
+                        send_message(chat_id, text)
+
+
         if 'reply_to_message' in update['message']:   
         # handling responses
             pre_message_inf=update['message']['reply_to_message']
@@ -514,7 +553,7 @@ def webhook():
             pr=list(db[fil1 & fil2]['PROJECT_ID'])
             if pr!=[]:
                 x="\n".join(pr)
-                send_message(585511605, f"This person left {chat_id} \nName:{first_name}\nUsername:{user_name}\n was part of the ongoing project/s \n{x} ")
+                send_message(585511605, f"This person left {chat_id} \nName:{first_name}\nUsername:{user_name} \nwas part of the ongoing project/s {x}.")
             else:
                 send_message(585511605, f"This person left {chat_id} \nName:{first_name}\nUsername:{user_name}")
         elif status=='member':

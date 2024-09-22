@@ -62,27 +62,8 @@ def getting_responses(gs,main_text, text, column):
     row=list(set(hhid).intersection(variable))
     print(row)
     for r in row:
-        # val = gs.cell(r, 11).value
-        # print(val)
-        # if val== None:
         gs.update_cell(r, column, text)
 
-# def exponential_backoff_request(func, *args, **kwargs):
-#     max_attempts = 5
-#     for attempt in range(max_attempts):
-#         try:
-#             return func(*args, **kwargs)
-#         except (GoogleAuthError, HttpError) as e:
-#             if e.resp.status in [403, 429]:  # Quota or rate limit errors
-#                 wait_time = 2 ** attempt  # Exponential backoff
-#                 print(f"Rate limit hit, retrying in {wait_time} seconds...")
-#                 time.sleep(wait_time)
-#             else:
-#                 raise
-#     raise Exception("Max retries exceeded")
-
-# def append_to_sheet(worksheet, row_data):
-#     exponential_backoff_request(worksheet.append_row, row_data)
 def sendpoll(chat_id, options,text):
     """Send a names to a user."""
     url = TELEGRAM_API_URL + 'sendPoll'
@@ -289,17 +270,6 @@ def webhook():
                                 if chat_id not in chats:
                                     text=f"Please select your name from the list [{args}]."
                                     send_inline_keyboard(chat_id, Names_, text)
-                                    # send_message_options(chat_id, text,keyboard)
-                                    # response=sendpoll(chat_id, Names_,text)
-                                    # if response.status_code == 200:
-                                    #         # Parse the response JSON
-                                    #         poll_info = response.json()
-                                    #         # Extract the poll_id
-                                    #         poll_id = poll_info['result']['poll']['id']
-                                    #         gs=read_gsheet(main_sheet_key, "Polling")
-                                    #         value=ast.literal_eval(gs.cell(1, 1).value)
-                                    #         value[poll_id]=args
-                                    #         gs.update_cell(1, 1, str(value))
                                 else:
                                     pairs_ = dict(zip(chats, Names_))
                                     text=f"You have already registered as <b>{pairs_[chat_id]}</b>. Please let {manager} and/or Bisrat know if you are not <b>{pairs_[chat_id]}</b>!"
@@ -426,10 +396,11 @@ def webhook():
                         # row_cell=11
                     else:
                         send_message(chat_id, "Only respond to data quality and translation requests.")
-
-                    row_cell=pd.DataFrame(read_gsheet(key, name_sheet).get_all_records()).columns.get_loc('field_response')+1
                     ### reading the gsheet
                     gs=read_gsheet(key, name_sheet)
+                    ### getting the column to update
+                    row_cell=pd.DataFrame(gs.get_all_records()).columns.get_loc('field_response')+1
+
                     ### updating the sheet
                     getting_responses(gs, pre_message, reply_text, row_cell)
                 else:

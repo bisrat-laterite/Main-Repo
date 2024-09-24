@@ -169,8 +169,9 @@ def webhook():
                                     filtered=content[content['chat_id']==chat_id]
                                     ### send only pending/ clarification needed comments
                                     filtered=filtered[filtered['Status'].isin(["Pending", "Clarification Needed"])]
-                                    filter_add=filtered['follow_up_response']==""
-                                    filtered=filtered[filtered['field_response']=="" and filter_add]
+                                    filter_add=filtered['follow_up_response']!="" 
+                                    filter_add2=filtered['field_response']!="" 
+                                    filtered=filtered[filtered['field_response']=="" | (filter_add & filter_add2)]
                                     if filtered.shape[0]==0:
                                         text="Thank you for all your responses. You have no data quality items remaining under your name"
                                         send_message(chat_id, text)
@@ -363,8 +364,9 @@ def webhook():
                         filtered=content[content['chat_id']==chat_id]
                         ### send only pending/ clarification needed comments
                         filtered=filtered[filtered['Status'].isin(["Pending", "Clarification Needed"])]
-                        filter_add=filtered['follow_up_response']==""
-                        filtered=filtered[filtered['field_response']=="" and filter_add]
+                        filter_add=filtered['follow_up_response']!=""
+                        filter_add2=filtered['field_response']!="" 
+                        filtered=filtered[filtered['field_response']=="" | (filter_add & filter_add2)]
                         if filtered.shape[0]==0:
                             text="Thank you for all your responses. You have no data quality items remaining under your name"
                             send_message(chat_id, text)

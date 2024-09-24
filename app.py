@@ -367,8 +367,9 @@ def webhook():
                         ### send only pending/ clarification needed comments
                         filtered=filtered[filtered['Status'].isin(["Pending", "Clarification Needed"])]
                         filter_add=filtered['follow_up_response']!=""
-                        filter_add2=filtered['field_response']!="" 
+                        print("check")
                         filtered=filtered[(filtered['field_response']=="") | (filter_add) ]
+                        print("check2")
                         if filtered.shape[0]==0:
                             text="Thank you for all your responses. You have no data quality items remaining under your name"
                             send_message(chat_id, text)

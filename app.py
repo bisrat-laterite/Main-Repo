@@ -46,7 +46,7 @@ def str_to_dict(string):
     # print(pre)
     return pre
 
-def getting_responses(gs,main_text, text, column):
+def getting_responses(gs,main_text, text, column,name_sheet):
     """getting responses from the enumerator"""
     find_key=main_text['HHID']
     find_variable=main_text['Variable']
@@ -62,7 +62,15 @@ def getting_responses(gs,main_text, text, column):
     row=list(set(hhid).intersection(variable))
     print(row)
     for r in row:
-        gs.update_cell(r, column, text)
+        if name_sheet=="Data Quality - General":
+            val = gs.cell(r, column).value
+            if val==None:
+                gs.update_cell(r, column, text)
+            else:
+                row_cell=pd.DataFrame(gs.get_all_records()).columns.get_loc('field_response2')+1
+                gs.update_cell(r, row_cell, text)
+        else:
+            gs.update_cell(r, column, text)
 
 def sendpoll(chat_id, options,text):
     """Send a names to a user."""
@@ -170,12 +178,13 @@ def webhook():
                                     ### send only pending/ clarification needed comments
                                     filtered=filtered[filtered['Status'].isin(["Pending", "Clarification Needed"])]
                                     filter_add=filtered['follow_up_response']!="" 
-                                    filter_add2=filtered['field_response']!="" 
+                                    filter_add2=filtered['field_response2']=="" 
                                     print("dfdf")
-                                    filtered=filtered[(filtered['field_response']=="") | (filter_add) ]
+                                    filtered=filtered[(filtered['field_response']=="") | ((filter_add) & (filter_add2)) ]
                                     print(filtered.head(5))
                                     if filtered.shape[0]==0:
-                                        text="Thank you for all your responses. You have no data quality items remaining under your name"
+                                        text="Thank you for all your responses. You have no data quality items remaining under your name" \
+                                        + "\n" +  f"<b>Project ID: </b> "+ args
                                         send_message(chat_id, text)
                                     for index, row in filtered.iterrows():
                                         text=(str(dict(row)))
@@ -371,10 +380,14 @@ def webhook():
                         filter_add=filtered['follow_up_response']!=""
                         print("check")
                         print(key)
-                        filtered=filtered[(filtered['field_response']=="") | (filter_add) ]
+                        filter_add2=filtered['field_response2']=="" 
+                        print("dfdf")
+                        filtered=filtered[(filtered['field_response']=="") | ((filter_add) & (filter_add2)) ]
+                        # filtered=filtered[(filtered['field_response']=="") | (filter_add) ]
                         print("check2")
                         if filtered.shape[0]==0:
-                            text="Thank you for all your responses. You have no data quality items remaining under your name"
+                            text="Thank you for all your responses. You have no data quality items remaining under your name" \
+                            + "\n" +  f"<b>Project ID: </b> "+ dict_from_columns[key]
                             send_message(chat_id, text)
                         for index, row in filtered.iterrows():
                             text=(str(dict(row)))
@@ -426,7 +439,7 @@ def webhook():
                     row_cell=pd.DataFrame(gs.get_all_records()).columns.get_loc('field_response')+1
 
                     ### updating the sheet
-                    getting_responses(gs, pre_message, reply_text, row_cell)
+                    getting_responses(gs, pre_message, reply_text, row_cell, name_sheet)
                 else:
                     send_message(chat_id, "Please respond only in written format. Thank you")
             else:

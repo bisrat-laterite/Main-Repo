@@ -172,7 +172,7 @@ def webhook():
                                     filter_add=filtered['follow_up_response']!="" 
                                     filter_add2=filtered['field_response']!="" 
                                     print("dfdf")
-                                    filtered=filtered[filtered['field_response']=="" | (filter_add & filter_add2)]
+                                    filtered=filtered[(filtered['field_response']=="") | (filter_add) ]
                                     print(filtered.head(5))
                                     if filtered.shape[0]==0:
                                         text="Thank you for all your responses. You have no data quality items remaining under your name"
@@ -368,7 +368,7 @@ def webhook():
                         filtered=filtered[filtered['Status'].isin(["Pending", "Clarification Needed"])]
                         filter_add=filtered['follow_up_response']!=""
                         filter_add2=filtered['field_response']!="" 
-                        filtered=filtered[filtered['field_response']=="" | (filter_add & filter_add2)]
+                        filtered=filtered[(filtered['field_response']=="") | (filter_add) ]
                         if filtered.shape[0]==0:
                             text="Thank you for all your responses. You have no data quality items remaining under your name"
                             send_message(chat_id, text)

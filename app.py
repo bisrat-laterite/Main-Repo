@@ -182,10 +182,10 @@ def webhook():
                                         text =  "<a href='https://www.laterite.com/'>Data Quality Bot</a>" \
                                         + "\n" + f"<b>Enumerator Name: </b>"+ row['Enumerator'] + \
                                             "\n" +   f"<b>HHID: </b>" + str(row['HHID'])  + \
-                                            "\n" +   f"<b>Variable: </b>" + row['Variable'] \
-                                            +  "\n" +   f"<b>Data Quality Question :</b>" + row['issue_description'] \
-                                            +  "\n" +   f"<b>Old response :</b>" + row['field_response'] \
-                                            +  "\n" +   f"<b>Office follow up :</b>" + row['follow_up_response'] \
+                                            "\n" +   f"<b>Variable: </b>" + str(row['Variable']) \
+                                            +  "\n" +   f"<b>Data Quality Question :</b>" + str(row['issue_description']) \
+                                            +  "\n" +   f"<b>Old response :</b>" + str(row['field_response']) \
+                                            +  "\n" +   f"<b>Office follow up :</b>" +str(row['follow_up_response']) \
                                             + "\n" + f"<b>Task :</b> Data quality" \
                                         + "\n" +  f"<b>Project ID: </b> "+ args
                                         send_message_main(chat_id, text)
@@ -235,8 +235,8 @@ def webhook():
                                         text =  "<a href='https://www.laterite.com/'>Data Quality Bot</a>" \
                                         + "\n" + f"<b>Enumerator Name: </b>"+ row['enum_name'] + \
                                             "\n" +   f"<b>HHID: </b>" + str(row['HHID'])  + \
-                                            "\n" +   f"<b>Variable: </b>" + row['Variable'] \
-                                            +  "\n" +   f"<b>Translation Item :</b>" + row['item_to_translate'] \
+                                            "\n" +   f"<b>Variable: </b>" + str(row['Variable']) \
+                                            +  "\n" +   f"<b>Translation Item :</b>" + str(row['item_to_translate']) \
                                             + "\n" + f"<b>Task :</b> Translation" \
                                         + "\n" +  f"<b>Project ID: </b> "+ args                      
                                         send_message_main(chat_id, text)
@@ -359,8 +359,10 @@ def webhook():
                 dict_pre=main[fil3][['key', 'project_id']]
                 dict_from_columns = dict_pre.set_index('key')['project_id'].to_dict()
                 keys=list(main[fil3]['key'])
+                print("x")
                 for key in keys:
                     try:
+                        print("y")
                         a=read_gsheet(key, "Data Quality - General")
                         content=pd.DataFrame(a.get_all_records())
                         filtered=content[content['chat_id']==chat_id]
@@ -368,6 +370,7 @@ def webhook():
                         filtered=filtered[filtered['Status'].isin(["Pending", "Clarification Needed"])]
                         filter_add=filtered['follow_up_response']!=""
                         print("check")
+                        print(key)
                         filtered=filtered[(filtered['field_response']=="") | (filter_add) ]
                         print("check2")
                         if filtered.shape[0]==0:
@@ -378,10 +381,10 @@ def webhook():
                             text =  "<a href='https://www.laterite.com/'>Data Quality Bot</a>" \
                             + "\n" + f"<b>Enumerator Name: </b>"+ row['Enumerator'] + \
                                 "\n" +   f"<b>HHID: </b>" + str(row['HHID'])  + \
-                                "\n" +   f"<b>Variable: </b>" + row['Variable'] \
-                                +  "\n" +   f"<b>Data Quality Question :</b>" + row['issue_description'] \
-                                +  "\n" +   f"<b>Old response :</b>" + row['field_response'] \
-                                +  "\n" +   f"<b>Office follow up :</b>" + row['follow_up_response'] \
+                                "\n" +   f"<b>Variable: </b>" + str(row['Variable']) \
+                                +  "\n" +   f"<b>Data Quality Question :</b>" + str(row['issue_description']) \
+                                +  "\n" +   f"<b>Old response :</b>" + str(row['field_response']) \
+                                +  "\n" +   f"<b>Office follow up :</b>" + str(row['follow_up_response']) \
                                 + "\n" + f"<b>Task :</b> Data quality" \
                             + "\n" +  f"<b>Project ID: </b> "+ dict_from_columns[key]
                             send_message_main(chat_id, text)

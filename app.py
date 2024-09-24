@@ -169,7 +169,8 @@ def webhook():
                                     filtered=content[content['chat_id']==chat_id]
                                     ### send only pending/ clarification needed comments
                                     filtered=filtered[filtered['Status'].isin(["Pending", "Clarification Needed"])]
-                                    filtered=filtered[filtered['field_response']==""]
+                                    filter_add=filtered['follow_up_response']==""
+                                    filtered=filtered[filtered['field_response']=="" and filter_add]
                                     if filtered.shape[0]==0:
                                         text="Thank you for all your responses. You have no data quality items remaining under your name"
                                         send_message(chat_id, text)
@@ -180,6 +181,8 @@ def webhook():
                                             "\n" +   f"<b>HHID: </b>" + str(row['HHID'])  + \
                                             "\n" +   f"<b>Variable: </b>" + row['Variable'] \
                                             +  "\n" +   f"<b>Data Quality Question :</b>" + row['issue_description'] \
+                                            +  "\n" +   f"<b>Old response :</b>" + row['field_response'] \
+                                            +  "\n" +   f"<b>Office follow up :</b>" + row['follow_up_response'] \
                                             + "\n" + f"<b>Task :</b> Data quality" \
                                         + "\n" +  f"<b>Project ID: </b> "+ args
                                         send_message_main(chat_id, text)
@@ -360,7 +363,8 @@ def webhook():
                         filtered=content[content['chat_id']==chat_id]
                         ### send only pending/ clarification needed comments
                         filtered=filtered[filtered['Status'].isin(["Pending", "Clarification Needed"])]
-                        filtered=filtered[filtered['field_response']==""]
+                        filter_add=filtered['follow_up_response']==""
+                        filtered=filtered[filtered['field_response']=="" and filter_add]
                         if filtered.shape[0]==0:
                             text="Thank you for all your responses. You have no data quality items remaining under your name"
                             send_message(chat_id, text)
@@ -371,6 +375,8 @@ def webhook():
                                 "\n" +   f"<b>HHID: </b>" + str(row['HHID'])  + \
                                 "\n" +   f"<b>Variable: </b>" + row['Variable'] \
                                 +  "\n" +   f"<b>Data Quality Question :</b>" + row['issue_description'] \
+                                +  "\n" +   f"<b>Old response :</b>" + row['field_response'] \
+                                +  "\n" +   f"<b>Office follow up :</b>" + row['follow_up_response'] \
                                 + "\n" + f"<b>Task :</b> Data quality" \
                             + "\n" +  f"<b>Project ID: </b> "+ dict_from_columns[key]
                             send_message_main(chat_id, text)

@@ -424,22 +424,25 @@ def webhook():
                     key=list(main_content[main_content['project_id']==project_id]['key'])[0]
 
                     ### identifying which sheet to edit
-                    if pre_message['Task']=="Translation":
-                        name_sheet="Data Quality - Translations"
-                        # row_cell=12
-                    elif pre_message['Task']=="Data quality":
-                        # pre_message['Task']=="Data quality"
-                        name_sheet="Data Quality - General"
-                        # row_cell=11
-                    else:
+                    if 'Task' not in pre_message.keys():
                         send_message(chat_id, "Only respond to data quality and translation requests.")
-                    ### reading the gsheet
-                    gs=read_gsheet(key, name_sheet)
-                    ### getting the column to update
-                    row_cell=pd.DataFrame(gs.get_all_records()).columns.get_loc('field_response')+1
+                    else:
+                        if pre_message['Task']=="Translation":
+                            name_sheet="Data Quality - Translations"
+                            # row_cell=12
+                        elif pre_message['Task']=="Data quality":
+                            # pre_message['Task']=="Data quality"
+                            name_sheet="Data Quality - General"
+                            # row_cell=11
+                    # else:
+                        
+                        ### reading the gsheet
+                        gs=read_gsheet(key, name_sheet)
+                        ### getting the column to update
+                        row_cell=pd.DataFrame(gs.get_all_records()).columns.get_loc('field_response')+1
 
-                    ### updating the sheet
-                    getting_responses(gs, pre_message, reply_text, row_cell, name_sheet)
+                        ### updating the sheet
+                        getting_responses(gs, pre_message, reply_text, row_cell, name_sheet)
                 else:
                     send_message(chat_id, "Please respond only in written format. Thank you")
             else:

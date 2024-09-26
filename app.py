@@ -298,7 +298,7 @@ def webhook():
                     else:
                         text=f"The command /rg takes one argument(only one) eg. /rg wb_tst_1, Please try again with the correct format!"
                         send_message(chat_id, text)
-                ### registration sheet
+                ### daily report sheet
                 elif command == '/dr':
                     if len(text.split(" "))==2:
                         args=text.split(" ")[1]
@@ -346,6 +346,27 @@ def webhook():
                             send_message(chat_id, f"The project id you specified({args}) is wrong. Please try again with the right project id.")
                     else:
                         send_message(chat_id, f"The command /dr takes one argument(only one) eg. /dr wb_tst_1, Please try again with the correct format!")
+                ### daily report sheet
+                elif command == '/il':
+                    if len(text.split(" "))==2:
+                        args=text.split(" ")[1]
+                        main=read_gsheet(main_sheet_key, main_sheet_name)
+                        main_content=pd.DataFrame(main.get_all_records())
+                        ### project key
+                        ### Checking 
+                        if args in list(main_content['project_id']):
+                            # key=list(main_content[main_content['project_id']==args]['key'])[0]
+                            # ### project manager
+                            # manager=list(main_content[main_content['project_id']==args]['manager'])[0]
+                            ### if key not found send an error messag
+                            text="Please respond to this message with the comments you have (like you responde to data quality comments.)" \
+                            + "\n" +  f"<b>Task: </b> "+ "IL" \
+                            + "\n" +  f"<b>Project ID: </b> "+ args
+                            send_message(chat_id, text)
+                        else:
+                            send_message(chat_id, f"The project id you specified({args}) is wrong. Please try again with the right project id.")
+                    else:
+                        send_message(chat_id, f"The command /il takes one argument(only one) eg. /il wb_tst_1, Please try again with the correct format!")
                 elif command=='/help':
                     text="Thank you so much for using the Data Quality Bot!" + \
                     "\n"+"Use /dq project_id to request for data quality questions" + \
@@ -437,12 +458,16 @@ def webhook():
                     # else:
                         
                         ### reading the gsheet
-                        gs=read_gsheet(key, name_sheet)
-                        ### getting the column to update
-                        row_cell=pd.DataFrame(gs.get_all_records()).columns.get_loc('field_response')+1
+                            gs=read_gsheet(key, name_sheet)
+                            ### getting the column to update
+                            row_cell=pd.DataFrame(gs.get_all_records()).columns.get_loc('field_response')+1
 
-                        ### updating the sheet
-                        getting_responses(gs, pre_message, reply_text, row_cell, name_sheet)
+                            ### updating the sheet
+                            getting_responses(gs, pre_message, reply_text, row_cell, name_sheet)
+                        elif pre_message['Task']=="IL":
+                            il=read_gsheet(key, "Issues_log")
+                            # [].append(chat_id)
+                            il.append_row([chat_id, reply_text])
                 else:
                     send_message(chat_id, "Please respond only in written format. Thank you")
             else:

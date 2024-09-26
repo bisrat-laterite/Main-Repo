@@ -8,6 +8,8 @@ from google.auth.exceptions import GoogleAuthError
 import time
 import ast
 import re
+from datetime import date
+
 # from googleapiclient.errors import HttpError
 
 app = Flask(__name__)
@@ -373,8 +375,9 @@ def webhook():
                     "\n"+"Use /tr project_id to request translation items for FCs only" + \
                     "\n"+"use /rg project_id to register to a new project you will be working on" + \
                     "\n"+"use /dr project_id to request household ids/sample completed each day " + \
+                    "\n"+"use /il project_id to give feedback on the instrument on the data quality monitoring" + \
                     "\n"+"<i>note that project_id is a placeholder for a project id </i> that you will be given at the start of a new project." + \
-                    "\n"+ "<i> If you have any questions, do reach out to Bisrat </i>" 
+                    "\n"+ "<i> If you have any questions, do reach out to Bisrat! </i>" 
                     send_message(chat_id, text)
 
             ### legacy
@@ -467,7 +470,7 @@ def webhook():
                         elif pre_message['Task']=="IL":
                             il=read_gsheet(key, "Issues_log")
                             # [].append(chat_id)
-                            il.append_row([chat_id, reply_text])
+                            il.append_row([chat_id, reply_text, date.today()])
                 else:
                     send_message(chat_id, "Please respond only in written format. Thank you")
             else:

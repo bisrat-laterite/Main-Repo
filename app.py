@@ -470,7 +470,7 @@ def webhook():
                         elif pre_message['Task']=="IL":
                             il=read_gsheet(key, "Issues_log")
                             # [].append(chat_id)
-                            il.append_row([chat_id, reply_text, date.today()])
+                            il.append_row([chat_id, reply_text, str(date.today())])
                 else:
                     send_message(chat_id, "Please respond only in written format. Thank you")
             else:

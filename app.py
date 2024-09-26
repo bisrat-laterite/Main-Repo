@@ -232,7 +232,7 @@ def webhook():
                                 try:
                                     a=read_gsheet(key, "Data Quality - Translations")
                                     content=pd.DataFrame(a.get_all_records())
-                                    filtered=content[content['enum_chat']==chat_id]
+                                    filtered=content[content['chat_id']==chat_id]
                                     ### send only pending/ clarification needed comments
                                     filtered=filtered[filtered['TASK_STATUS'].isin(["Pending", "Clarification Needed"])]
                                     filtered=filtered[filtered['field_response']==""]

@@ -207,6 +207,54 @@ def webhook():
                         else:
                             text=f"The project id you specified({args}) is wrong. Please try again with the right project id."
                             send_message(chat_id, text)
+                    elif len(text.split(" "))==1:
+                        db=pd.DataFrame(read_gsheet(main_sheet_key, "Database").get_all_records())
+                        fil1=db['CHAT_ID']==chat_id
+                        fil2=db['STATUS']=="Ongoing"
+                        project_idz=list(db[fil1 & fil2]['PROJECT_ID'])
+                        main=pd.DataFrame(read_gsheet(main_sheet_key, main_sheet_name).get_all_records())
+                        fil3=main['project_id'].isin(project_idz)
+                        dict_pre=main[fil3][['key', 'project_id']]
+                        dict_from_columns = dict_pre.set_index('key')['project_id'].to_dict()
+                        keys=list(main[fil3]['key'])
+                        print("x")
+                        for key in keys:
+                            try:
+                                print("y")
+                                a=read_gsheet(key, "Data Quality - General")
+                                content=pd.DataFrame(a.get_all_records())
+                                filtered=content[content['chat_id']==chat_id]
+                                ### send only pending/ clarification needed comments
+                                filtered=filtered[filtered['Status'].isin(["Pending", "Clarification Needed"])]
+                                filter_add=filtered['follow_up_response']!=""
+                                print("check")
+                                print(key)
+                                filter_add2=filtered['field_response2']=="" 
+                                print("dfdf")
+                                filtered=filtered[(filtered['field_response']=="") | ((filter_add) & (filter_add2)) ]
+                                # filtered=filtered[(filtered['field_response']=="") | (filter_add) ]
+                                print("check2")
+                                if filtered.shape[0]==0:
+                                    text="Thank you for all your responses. You have no data quality items remaining under your name" \
+                                    + "\n" +  f"<b>Project ID: </b> "+ dict_from_columns[key]
+                                    send_message(chat_id, text)
+                                for index, row in filtered.iterrows():
+                                    text=(str(dict(row)))
+                                    text =  "<a href='https://www.laterite.com/'>Data Quality Bot</a>" \
+                                    + "\n" + f"<b>Enumerator Name: </b>"+ row['Enumerator'] + \
+                                        "\n" +   f"<b>HHID: </b>" + str(row['HHID'])  + \
+                                        "\n" +   f"<b>Variable: </b>" + str(row['Variable']) \
+                                        +  "\n" +   f"<b>Data Quality Question :</b>" + str(row['issue_description']) \
+                                        +  "\n" +   f"<b>Old response :</b>" + str(row['field_response']) \
+                                        +  "\n" +   f"<b>Office follow up :</b>" + str(row['follow_up_response']) \
+                                        + "\n" + f"<b>Task :</b> Data quality" \
+                                    + "\n" +  f"<b>Project ID: </b> "+ dict_from_columns[key]
+                                    send_message_main(chat_id, text)
+                                # send_message(chat_id, "success")
+                            except:
+                                text= f"Some error let the project manager/Bisrat know"
+                                send_message(chat_id, text)
+
                     else:
                         text=f"The command /dq takes one argument(only one) eg. /dq wb_tst_1, Please try again with the correct format!"                        
                         send_message(chat_id, text)

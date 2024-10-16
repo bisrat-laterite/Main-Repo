@@ -609,27 +609,31 @@ def webhook():
                 # dates=list(set(dates))
                 #ok dkjdfj
                 # send_message(user_id, "works till this point."+str(dates[option]))
-                hhids=daily_report[daily_report['today']==dates[int(option)]][['hhid', 'CHAT_ID', 'consent', 'enum_name']]
-                hhids=hhids[hhids['CHAT_ID']==user_id]
-                attempted=len(list(hhids['hhid']))
+                pre=daily_report[daily_report['today']==dates[int(option)]][['hhid', 'CHAT_ID', 'consent', 'enum_name']]
+                hhids=pre[hhids['CHAT_ID']==user_id]
                 
-                name_=list(hhids['enum_name'])[0]
+                
+                
                 ##filet with conset
                 hhids=hhids[hhids['consent']==1]['hhid']
-                consented=len(list(hhids))
+                
                 if hhids.empty:
                     send_message(user_id, f"You have no surveys completed on {str(dates[int(option)])}")
                 else:
+                    attempted=len(list(pre[hhids['CHAT_ID']==user_id]['hhid']))
+                    name_=list(hhids['enum_name'])[0]
+                    consented=len(list(hhids))
+
                     print(hhids.head())
                     print(list(hhids))
 
                     ids="\n".join([str(x) for x in hhids])
                     # print(ids)
-                    send_message(user_id,f"you {name_} have completed these households on {str(dates[int(option)])} \n{ids}")
-                    # text=f"your {name_} daily report on {str(dates[int(option)])}" + \
-                    # +  "\n" + f"<b>Number of attempted Households: </b>"+ str(attempted) + \
-                    # +  "\n" + f"<b>Number of completed(consented HHs): </b>" + str(consented)
-                    # send_message(user_id, text)
+                    send_message(user_id,f"you ({name_}) have completed these households on {str(dates[int(option)])} \n{ids}")
+                    text=f"your ({name_}) daily report on {str(dates[int(option)])}" + \
+                    +  "\n" + f"<b>Number of attempted Households: </b>"+ str(attempted) + \
+                    +  "\n" + f"<b>Number of completed(consented HHs): </b>" + str(consented)
+                    send_message(user_id, text)
             except:
                 send_message(user_id, f"Some error please contact bisrat!")
 

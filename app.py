@@ -610,6 +610,7 @@ def webhook():
                 #ok dkjdfj
                 # send_message(user_id, "works till this point."+str(dates[option]))
                 pre=daily_report[daily_report['today']==dates[int(option)]][['hhid', 'CHAT_ID', 'consent', 'enum_name']]
+                print("xxx")
                 hhids=pre[hhids['CHAT_ID']==user_id]
                 
                 

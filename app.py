@@ -621,7 +621,7 @@ def webhook():
                 if hhids.empty:
                     send_message(user_id, f"You have no surveys completed on {str(dates[int(option)])}")
                 else:
-                    attempted=len(list(pre[hhids['CHAT_ID']==user_id]['hhid']))
+                    attempted=len(list(pre[pre['CHAT_ID']==user_id]['hhid']))
                     name_=list(hhids['enum_name'])[0]
                     consented=len(list(hhids))
 

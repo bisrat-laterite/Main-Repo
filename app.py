@@ -609,10 +609,14 @@ def webhook():
                 # dates=list(set(dates))
                 #ok dkjdfj
                 # send_message(user_id, "works till this point."+str(dates[option]))
-                hhids=daily_report[daily_report['today']==dates[int(option)]][['hhid', 'CHAT_ID', 'consent']]
+                hhids=daily_report[daily_report['today']==dates[int(option)]][['hhid', 'CHAT_ID', 'consent', 'enum_name']]
                 hhids=hhids[hhids['CHAT_ID']==user_id]
+                attempted=len(list(hhids['hhid']))
+                
+                name_=list(hhids['enum_name'])[0]
                 ##filet with conset
                 hhids=hhids[hhids['consent']==1]['hhid']
+                consented=len(list(hhids))
                 if hhids.empty:
                     send_message(user_id, f"You have no surveys completed on {str(dates[int(option)])}")
                 else:
@@ -621,7 +625,11 @@ def webhook():
 
                     ids="\n".join([str(x) for x in hhids])
                     # print(ids)
-                    send_message(user_id,f"you have completed these households on {str(dates[int(option)])} \n{ids}")
+                    send_message(user_id,f"you {name_} have completed these households on {str(dates[int(option)])} \n{ids}")
+                    text=f"your {name_} daily report on {str(dates[int(option)])}" + \
+                    f"<b>Number of attempted Households: </b>"+ str(attempted) + \
+                    f"<b>Number of completed(consented HHs): </b>" + str(consented)
+                    send_message(user_id, text)
             except:
                 send_message(user_id, f"Some error please contact bisrat!")
 

@@ -627,8 +627,8 @@ def webhook():
                     # print(ids)
                     send_message(user_id,f"you {name_} have completed these households on {str(dates[int(option)])} \n{ids}")
                     text=f"your {name_} daily report on {str(dates[int(option)])}" + \
-                    f"<b>Number of attempted Households: </b>"+ str(attempted) + \
-                    f"<b>Number of completed(consented HHs): </b>" + str(consented)
+                    +  "\n" + f"<b>Number of attempted Households: </b>"+ str(attempted) + \
+                    +  "\n" + f"<b>Number of completed(consented HHs): </b>" + str(consented)
                     send_message(user_id, text)
             except:
                 send_message(user_id, f"Some error please contact bisrat!")

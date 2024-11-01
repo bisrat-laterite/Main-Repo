@@ -501,6 +501,12 @@ def webhook():
                     else:
                         if pre_message['Task']=="Translation":
                             name_sheet="Data Quality - Translations"
+                            gs=read_gsheet(key, name_sheet)
+                            ### getting the column to update
+                            row_cell=pd.DataFrame(gs.get_all_records()).columns.get_loc('field_response')+1
+
+                            ### updating the sheet
+                            getting_responses(gs, pre_message, reply_text, row_cell, name_sheet)
                             # row_cell=12
                         elif pre_message['Task']=="Data quality":
                             # pre_message['Task']=="Data quality"

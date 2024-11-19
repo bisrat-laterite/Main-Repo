@@ -445,10 +445,12 @@ def webhook():
                                     filtered=content[content['CHAT_ID']==chat_id]
                                     ## filter only non completed survey
                                     filtered=filtered[filtered["completed"]==""]
+                                    print("yes 1")
                                     if filtered.shape[0]==0:
                                         text="Thank you for all your submissions. You have no remaining forms."
                                         send_message(chat_id, text)
                                     hhids=list(filtered['hhid'])
+                                    print("yes 2")
                                     ids="\n".join([str(x) for x in hhids])
                                     name_=list(filtered['enum_name'])[0]
                                     send_message(user_id,f"you ({name_}) will need to completed the happy/sad cards form for  \n{ids}")

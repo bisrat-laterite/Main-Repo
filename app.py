@@ -432,31 +432,31 @@ def webhook():
                             ### if key not found send an error message
                             # project_key=project_link.replace('//', '/').split('/')[4]
                             # send_message(chat_id, key)
-                            enum_list_pre=read_gsheet(key, "ENUM_LIST")
-                            enum_list=list(pd.DataFrame(enum_list_pre.get_all_records())['CHAT_ID'])
-                            if chat_id not in enum_list:
-                                text=f"You have not yet registered to the {args} project. Please do so using [/rg {args}] and following the steps accordingly."
-                                send_message(chat_id, text)
-                            else:
-                                try:
-                                    a=read_gsheet(key, "MISC")
-                                    content=pd.DataFrame(a.get_all_records())
-                                    ## Filtering by chat id
-                                    filtered=content[content['CHAT_ID']==chat_id]
-                                    ## filter only non completed survey
-                                    filtered=filtered[filtered["completed"]==""]
-                                    print("yes 1")
-                                    if filtered.shape[0]==0:
-                                        text="Thank you for all your submissions. You have no remaining forms."
-                                        send_message(chat_id, text)
-                                    hhids=list(filtered['hhid'])
-                                    print("yes 2")
-                                    ids="\n".join([str(x) for x in hhids])
-                                    name_=list(filtered['enum_name'])[0]
-                                    send_message(user_id,f"you ({name_}) will need to completed the happy/sad cards form for  \n{ids}")
-                                except:
-                                    text=f"Some error let the project manager ({manager}/Bisrat) know"
+                            # enum_list_pre=read_gsheet(key, "ENUM_LIST")
+                            # enum_list=list(pd.DataFrame(enum_list_pre.get_all_records())['CHAT_ID'])
+                            # if chat_id not in enum_list:
+                            #     text=f"You have not yet registered to the {args} project. Please do so using [/rg {args}] and following the steps accordingly."
+                            #     send_message(chat_id, text)
+                            # else:
+                            try:
+                                a=read_gsheet(key, "MISC")
+                                content=pd.DataFrame(a.get_all_records())
+                                ## Filtering by chat id
+                                filtered=content[content['CHAT_ID']==chat_id]
+                                ## filter only non completed survey
+                                filtered=filtered[filtered["completed"]==""]
+                                #print("yes 1")
+                                if filtered.shape[0]==0:
+                                    text="Thank you for all your submissions. You have no remaining forms/are not part of the project."
                                     send_message(chat_id, text)
+                                hhids=list(filtered['hhid'])
+                                #print("yes 2")
+                                ids="\n".join([str(x) for x in hhids])
+                                name_=list(filtered['enum_name'])[0]
+                                send_message(chat_id,f"you ({name_}) will need to completed the happy/sad cards form for  \n{ids}")
+                            except:
+                                text=f"Some error let the project manager ({manager}/Bisrat) know"
+                                send_message(chat_id, text)
                 elif command=='/help':
                     text="Thank you so much for using the Data Quality Bot!" + \
                     "\n"+"Use /dq project_id to request for data quality questions" + \

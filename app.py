@@ -417,6 +417,44 @@ def webhook():
                             send_message(chat_id, f"The project id you specified({args}) is wrong. Please try again with the right project id.")
                     else:
                         send_message(chat_id, f"The command /il takes one argument(only one) eg. /il wb_tst_1, Please try again with the correct format!")
+                ### miscelleneous
+                elif command == '/mi':
+                    if len(text.split(" "))==2:
+                        args=text.split(" ")[1]
+                        main=read_gsheet(main_sheet_key, main_sheet_name)
+                        main_content=pd.DataFrame(main.get_all_records())
+                        ### project key
+                        ### Checking 
+                        if args in list(main_content['project_id']):
+                            key=list(main_content[main_content['project_id']==args]['key'])[0]
+                            ### project manager
+                            manager=list(main_content[main_content['project_id']==args]['manager'])[0]
+                            ### if key not found send an error message
+                            # project_key=project_link.replace('//', '/').split('/')[4]
+                            # send_message(chat_id, key)
+                            enum_list_pre=read_gsheet(key, "ENUM_LIST")
+                            enum_list=list(pd.DataFrame(enum_list_pre.get_all_records())['CHAT_ID'])
+                            if chat_id not in enum_list:
+                                text=f"You have not yet registered to the {args} project. Please do so using [/rg {args}] and following the steps accordingly."
+                                send_message(chat_id, text)
+                            else:
+                                try:
+                                    a=read_gsheet(key, "MISC")
+                                    content=pd.DataFrame(a.get_all_records())
+                                    ## Filtering by chat id
+                                    filtered=content[content['CHAT_ID']==chat_id]
+                                    ## filter only non completed survey
+                                    filtered=filtered[filtered["completed"]==""]
+                                    if filtered.shape[0]==0:
+                                        text="Thank you for all your submissions. You have no remaining forms."
+                                        send_message(chat_id, text)
+                                    hhids=list(filtered['hhid'])
+                                    ids="\n".join([str(x) for x in hhids])
+                                    name_=list(filtered['enum_name'])[0]
+                                    send_message(user_id,f"you ({name_}) will need to completed the happy/sad cards form for  \n{ids}")
+                                except:
+                                    text=f"Some error let the project manager ({manager}/Bisrat) know"
+                                    send_message(chat_id, text)
                 elif command=='/help':
                     text="Thank you so much for using the Data Quality Bot!" + \
                     "\n"+"Use /dq project_id to request for data quality questions" + \

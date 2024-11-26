@@ -453,7 +453,7 @@ def webhook():
                                 #print("yes 2")
                                 ids="\n".join([str(x) for x in hhids])
                                 name_=list(filtered['enum_name'])[0]
-                                send_message(chat_id,f"you ({name_}) will need to completed the happy/sad cards form for  \n{ids}")
+                                send_message(chat_id,f"you ({name_}) will need to complete the happy/sad cards form for  \n{ids}")
                             except:
                                 text=f"Some error let the project manager ({manager}/Bisrat) know"
                                 send_message(chat_id, text)
